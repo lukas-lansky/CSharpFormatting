@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using CSharpFormatting.Common;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
@@ -8,10 +9,20 @@ namespace CSharpFormatting.Parsing.Roslyn
 {
     public sealed class CSharpParser
     {
+        public class CompilationErrorException : Exception
+        {
+
+        }
+
         public IEnumerable<InterpretedTextChunk> Parse(string code)
         {
             var roslynCode = CSharpScript.Create(code);
             var roslynCompilation = roslynCode.GetCompilation();
+
+            if (roslynCompilation.GetDiagnostics().Any(d => d.Severity == DiagnosticSeverity.Error))
+            {
+                throw new CompilationErrorException();
+            }
 
             foreach (var syntaxTree in roslynCompilation.SyntaxTrees)
             {
