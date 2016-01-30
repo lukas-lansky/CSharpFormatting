@@ -14,34 +14,52 @@ namespace CSharpFormatting.Parsing.Roslyn
 
         }
 
-        public IEnumerable<InterpretedTextChunk> Parse(string code)
+        public AnnotationResult Parse(string code)
         {
             var roslynCode = CSharpScript.Create(code);
             var roslynCompilation = roslynCode.GetCompilation();
 
-            if (roslynCompilation.GetDiagnostics().Any(d => d.Severity == DiagnosticSeverity.Error))
-            {
-                throw new CompilationErrorException();
-            }
+            var roslynDiagnostics = roslynCompilation.GetDiagnostics();
+            var diagnostics = roslynDiagnostics.Select(
+                rd => new CodeDiagnosticResult(
+                    MapSeverity(rd.Severity),
+                    rd.ToString()));
 
-            foreach (var syntaxTree in roslynCompilation.SyntaxTrees)
-            {
-                var itcs = ParseSyntaxTree(
-                    syntaxTree,
-                    roslynCompilation.GetSemanticModel(syntaxTree, ignoreAccessibility: true));
+            var chunks = new List<AnnotatedTextChunk>();
 
-                foreach (var itc in itcs)
+            if (!diagnostics.Any(d => d.Severity == Common.DiagnosticSeverity.Error))
+            {
+                foreach (var syntaxTree in roslynCompilation.SyntaxTrees)
                 {
-                    yield return itc;
+                    var itcs = ParseSyntaxTree(
+                        syntaxTree,
+                        roslynCompilation.GetSemanticModel(syntaxTree, ignoreAccessibility: true));
+
+                    chunks.AddRange(itcs);
                 }
             }
+
+            return new AnnotationResult(diagnostics, chunks);
         }
 
-        private IEnumerable<InterpretedTextChunk> ParseSyntaxTree(SyntaxTree syntaxTree, SemanticModel sm)
+        private IEnumerable<AnnotatedTextChunk> ParseSyntaxTree(SyntaxTree syntaxTree, SemanticModel sm)
         {
-            var chunks = new List<InterpretedTextChunk>();
+            var chunks = new List<AnnotatedTextChunk>();
             new ReportingCSharpSyntaxWalker(itc => chunks.Add(itc), sm).Visit(syntaxTree.GetRoot());
             return chunks;
+        }
+        
+        private Common.DiagnosticSeverity MapSeverity(Microsoft.CodeAnalysis.DiagnosticSeverity roslynSeverity)
+        {
+            switch (roslynSeverity)
+            {
+                case Microsoft.CodeAnalysis.DiagnosticSeverity.Error:
+                    return Common.DiagnosticSeverity.Error;
+                case Microsoft.CodeAnalysis.DiagnosticSeverity.Warning:
+                    return Common.DiagnosticSeverity.Warning;
+                default:
+                    return Common.DiagnosticSeverity.Info;
+            }
         } 
     }
 }

@@ -9,10 +9,10 @@ namespace CSharpFormatting.Parsing.Roslyn
 {
     internal sealed class ReportingCSharpSyntaxWalker : CSharpSyntaxWalker
     {
-        private readonly Action<InterpretedTextChunk> AddItcAction;
+        private readonly Action<AnnotatedTextChunk> AddItcAction;
         private readonly SemanticModel SemanticModel;
 
-        public ReportingCSharpSyntaxWalker(Action<InterpretedTextChunk> addItcAction, SemanticModel sm)
+        public ReportingCSharpSyntaxWalker(Action<AnnotatedTextChunk> addItcAction, SemanticModel sm)
             : base(SyntaxWalkerDepth.Trivia)
         {
             AddItcAction = addItcAction;
@@ -21,7 +21,7 @@ namespace CSharpFormatting.Parsing.Roslyn
 
         public override void VisitToken(SyntaxToken token)
         {
-            var itc = new InterpretedTextChunk {TextValue = token.Text};
+            var itc = new AnnotatedTextChunk {TextValue = token.Text};
 
             var node = token.Parent;
 
@@ -64,7 +64,7 @@ namespace CSharpFormatting.Parsing.Roslyn
 
         public override void VisitTrivia(SyntaxTrivia trivia)
         {
-            AddItcAction(new InterpretedTextChunk { TextValue = trivia.ToString() });
+            AddItcAction(new AnnotatedTextChunk { TextValue = trivia.ToString() });
 
             base.VisitTrivia(trivia);
         }

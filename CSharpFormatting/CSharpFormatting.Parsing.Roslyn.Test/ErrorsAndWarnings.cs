@@ -7,18 +7,16 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
     public class ErrorsAndWarnings
     {
         [TestMethod]
-        public void MallformedCodeFailsWithProperException()
+        public void MallformedCodeCompilationFails()
         {
-            try
-            {
-                var chunks = new CSharpParser().Parse("some totally not-c#-y string").ToList();
-            }
-            catch (CSharpParser.CompilationErrorException)
-            {
-                return;
-            }
+            var result = new CSharpParser().Parse("some totally not-c#-y string");
+            Assert.IsTrue(result.DiagnosticResults.Any(d => d.Severity == Common.DiagnosticSeverity.Error));
+        }
 
-            Assert.Fail();
+        [TestMethod]
+        public void WarningsAreReported()
+        {
+
         }
     }
 }
