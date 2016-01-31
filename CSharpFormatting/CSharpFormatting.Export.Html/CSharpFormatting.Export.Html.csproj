@@ -45,9 +45,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSharpFormatting.Export.Common\CSharpFormatting.Export.Common.csproj">
-      <Project>{a6cfa3e6-c221-4485-88b6-2140b8442f4d}</Project>
-      <Name>CSharpFormatting.Export.Common</Name>
+    <ProjectReference Include="..\CSharpFormatting.Common\CSharpFormatting.Common.csproj">
+      <Project>{5a0e15fd-7f4c-47e7-a3fc-380aa885d20d}</Project>
+      <Name>CSharpFormatting.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

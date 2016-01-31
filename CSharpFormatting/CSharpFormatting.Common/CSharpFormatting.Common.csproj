@@ -44,6 +44,7 @@
     <Compile Include="AnnotationResult.cs" />
     <Compile Include="AnnotatedTextChunk.cs" />
     <Compile Include="CodeDiagnosticResult.cs" />
+    <Compile Include="IExporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

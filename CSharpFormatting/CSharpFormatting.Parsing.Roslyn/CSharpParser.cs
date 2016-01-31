@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using CSharpFormatting.Common;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
+using System.IO;
+using Microsoft.CodeAnalysis.Scripting;
 
 namespace CSharpFormatting.Parsing.Roslyn
 {
@@ -14,9 +16,16 @@ namespace CSharpFormatting.Parsing.Roslyn
 
         }
 
-        public AnnotationResult Parse(string code)
+        public AnnotationResult Parse(string code, string baseDirectory = null)
         {
-            var roslynCode = CSharpScript.Create(code);
+            var options = ScriptOptions.Default;
+
+            if (baseDirectory != null)
+            {
+                options = options.WithMetadataResolver(ScriptMetadataResolver.Default.WithBaseDirectory(baseDirectory));
+            }
+
+            var roslynCode = CSharpScript.Create(code, options);
             var roslynCompilation = roslynCode.GetCompilation();
 
             var roslynDiagnostics = roslynCompilation.GetDiagnostics();
@@ -24,6 +33,8 @@ namespace CSharpFormatting.Parsing.Roslyn
                 rd => new CodeDiagnosticResult(
                     MapSeverity(rd.Severity),
                     rd.ToString()));
+
+            var emitResult = roslynCompilation.Emit(new MemoryStream());
 
             var chunks = new List<AnnotatedTextChunk>();
 

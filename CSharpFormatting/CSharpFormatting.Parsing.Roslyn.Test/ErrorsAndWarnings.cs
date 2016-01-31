@@ -12,11 +12,5 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             var result = new CSharpParser().Parse("some totally not-c#-y string");
             Assert.IsTrue(result.DiagnosticResults.Any(d => d.Severity == Common.DiagnosticSeverity.Error));
         }
-
-        [TestMethod]
-        public void WarningsAreReported()
-        {
-
-        }
     }
 }
