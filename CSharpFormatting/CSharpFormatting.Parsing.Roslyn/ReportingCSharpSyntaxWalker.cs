@@ -78,12 +78,17 @@ namespace CSharpFormatting.Parsing.Roslyn
 
         private string GetTooltipForType(ITypeSymbol typeSymbol)
         {
-            return $"{typeSymbol.ContainingNamespace}.{typeSymbol.Name}";
+            return typeSymbol.ToDisplayString(
+                new SymbolDisplayFormat(
+                    typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces));
         }
 
         private string GetTooltipForMethod(IMethodSymbol methodSymbol)
         {
-            return $"{GetTooltipForType(methodSymbol.ContainingType)}.{methodSymbol.Name}";
+            return methodSymbol.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat
+                .AddGenericsOptions(SymbolDisplayGenericsOptions.IncludeTypeParameters)
+                .AddParameterOptions(SymbolDisplayParameterOptions.IncludeName)
+                .AddMemberOptions(SymbolDisplayMemberOptions.IncludeType));
         }
 
         public override void VisitTrivia(SyntaxTrivia trivia)

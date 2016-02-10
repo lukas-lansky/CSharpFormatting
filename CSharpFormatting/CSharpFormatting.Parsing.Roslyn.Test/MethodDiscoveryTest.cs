@@ -14,10 +14,23 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             var result = new CSharpParser().Parse(expression);
 
             var intChunk = result.TextChunks.First(ch => ch.TextValue == "Join");
+            
+            ExpressionHelper.Check(expression, result);
+            Assert.AreEqual(Common.CodeType.Method, intChunk.CodeType);
+            Assert.AreEqual("string string.Join(string separator, params string[] value)", intChunk.TooltipValue);
+        }
+
+        [TestMethod]
+        public void OverloadResolutionWorks()
+        {
+            var expression = "string.Join(\",\", new[]{2, 5})";
+            var result = new CSharpParser().Parse(expression);
+
+            var intChunk = result.TextChunks.First(ch => ch.TextValue == "Join");
 
             ExpressionHelper.Check(expression, result);
             Assert.AreEqual(Common.CodeType.Method, intChunk.CodeType);
-            Assert.AreEqual("System.String.Join", intChunk.TooltipValue);
+            Assert.AreEqual("string string.Join<int>(string separator, System.Collections.Generic.IEnumerable<int> values)", intChunk.TooltipValue);
         }
     }
 }
