@@ -45,13 +45,26 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Helpers\ChunkHtmlizerTest.cs" />
     <Compile Include="HtmlExporterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CSharpFormatting.Common\CSharpFormatting.Common.csproj">
+      <Project>{5a0e15fd-7f4c-47e7-a3fc-380aa885d20d}</Project>
+      <Name>CSharpFormatting.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CSharpFormatting.Export.Html\CSharpFormatting.Export.Html.csproj">
+      <Project>{cf779f98-b3fb-4625-bcd8-f96df6b1d121}</Project>
+      <Name>CSharpFormatting.Export.Html</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

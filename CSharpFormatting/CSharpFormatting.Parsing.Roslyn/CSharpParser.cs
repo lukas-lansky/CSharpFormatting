@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 using CSharpFormatting.Common;
 using Microsoft.CodeAnalysis;
@@ -11,11 +10,6 @@ namespace CSharpFormatting.Parsing.Roslyn
 {
     public sealed class CSharpParser
     {
-        public class CompilationErrorException : Exception
-        {
-
-        }
-
         public AnnotationResult Parse(string code, string baseDirectory = null)
         {
             var options = ScriptOptions.Default;
@@ -36,7 +30,7 @@ namespace CSharpFormatting.Parsing.Roslyn
 
             var emitResult = roslynCompilation.Emit(new MemoryStream());
 
-            var chunks = new List<AnnotatedTextChunk>();
+            var chunks = new List<AnnotatedCodeChunk>();
 
             if (!diagnostics.Any(d => d.Severity == Common.DiagnosticSeverity.Error))
             {
@@ -53,9 +47,9 @@ namespace CSharpFormatting.Parsing.Roslyn
             return new AnnotationResult(diagnostics, chunks);
         }
 
-        private IEnumerable<AnnotatedTextChunk> ParseSyntaxTree(SyntaxTree syntaxTree, SemanticModel sm)
+        private IEnumerable<AnnotatedCodeChunk> ParseSyntaxTree(SyntaxTree syntaxTree, SemanticModel sm)
         {
-            var chunks = new List<AnnotatedTextChunk>();
+            var chunks = new List<AnnotatedCodeChunk>();
             new ReportingCSharpSyntaxWalker(itc => chunks.Add(itc), sm).Visit(syntaxTree.GetRoot());
             return chunks;
         }

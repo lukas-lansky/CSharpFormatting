@@ -6,12 +6,12 @@ namespace CSharpFormatting.Common
     {
         public readonly IReadOnlyList<CodeDiagnosticResult> DiagnosticResults;
 
-        public readonly IReadOnlyList<AnnotatedTextChunk> TextChunks;
+        public readonly IReadOnlyList<AnnotatedCodeChunk> TextChunks;
 
-        public AnnotationResult(IEnumerable<CodeDiagnosticResult> diagnosticResults, IEnumerable<AnnotatedTextChunk> textChunks)
+        public AnnotationResult(IEnumerable<CodeDiagnosticResult> diagnosticResults, IEnumerable<AnnotatedCodeChunk> textChunks)
         {
             DiagnosticResults = new List<CodeDiagnosticResult>(diagnosticResults);
-            TextChunks = new List<AnnotatedTextChunk>(textChunks);
+            TextChunks = new List<AnnotatedCodeChunk>(textChunks);
         }
     }
 }

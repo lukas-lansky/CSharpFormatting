@@ -9,10 +9,10 @@ namespace CSharpFormatting.Parsing.Roslyn
 {
     internal sealed class ReportingCSharpSyntaxWalker : CSharpSyntaxWalker
     {
-        private readonly Action<AnnotatedTextChunk> AddItcAction;
+        private readonly Action<AnnotatedCodeChunk> AddItcAction;
         private readonly SemanticModel SemanticModel;
 
-        public ReportingCSharpSyntaxWalker(Action<AnnotatedTextChunk> addItcAction, SemanticModel sm)
+        public ReportingCSharpSyntaxWalker(Action<AnnotatedCodeChunk> addItcAction, SemanticModel sm)
             : base(SyntaxWalkerDepth.Trivia)
         {
             AddItcAction = addItcAction;
@@ -21,7 +21,7 @@ namespace CSharpFormatting.Parsing.Roslyn
 
         public override void VisitToken(SyntaxToken token)
         {
-            var itc = new AnnotatedTextChunk {TextValue = token.Text};
+            var itc = new AnnotatedCodeChunk {TextValue = token.Text};
 
             var node = token.Parent;
 
@@ -33,13 +33,11 @@ namespace CSharpFormatting.Parsing.Roslyn
 
                     if (symbol is INamedTypeSymbol) // variable mention
                     {
-                        var typeSymbol = symbol as INamedTypeSymbol;
-                        itc.TooltipValue = typeSymbol.Name;
+                        itc.TooltipValue = GetTooltipForType(symbol as INamedTypeSymbol);
                     }
                     else if (symbol is IFieldSymbol) // var
                     {
-                        var typeSymbol = symbol as IFieldSymbol;
-                        itc.TooltipValue = typeSymbol.Type.Name;
+                        itc.TooltipValue = GetTooltipForType((symbol as IFieldSymbol).Type);
                     }
                 }
 
@@ -47,24 +45,36 @@ namespace CSharpFormatting.Parsing.Roslyn
                 {
                     var symbol = SemanticModel.GetDeclaredSymbol(node);
                     var typeSymbol = symbol as IFieldSymbol;
-                    itc.TooltipValue = typeSymbol?.Type.Name;
+                    itc.TooltipValue = GetTooltipForType(typeSymbol?.Type);
                 }
             }
 
             if (node is PredefinedTypeSyntax) // "int"
             {
                 var type = SemanticModel.GetTypeInfo(node).Type;
-                itc.TooltipValue = type.Name;
+                itc.TooltipValue = GetTooltipForType(type);
             }
-
+            
             AddItcAction(itc);
 
             base.VisitToken(token);
         }
 
+        private string GetTooltipForType(ITypeSymbol typeSymbol)
+        {
+            return $"{typeSymbol.ContainingNamespace}.{typeSymbol.Name}";
+        }
+
         public override void VisitTrivia(SyntaxTrivia trivia)
         {
-            AddItcAction(new AnnotatedTextChunk { TextValue = trivia.ToString() });
+            var atch = new AnnotatedCodeChunk { TextValue = trivia.ToString() };
+
+            if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
+            {
+                atch.CodeType = CodeType.Comment;
+            }
+
+            AddItcAction(atch);
 
             base.VisitTrivia(trivia);
         }

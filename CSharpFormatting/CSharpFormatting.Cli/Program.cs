@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using CommandLine.Text;
+using CSharpFormatting.Export.Html;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,9 @@ namespace CSharpFormatting.Cli
         [Option('v', "verbose", DefaultValue = true, HelpText = "Prints all messages to standard output.")]
         public bool Verbose { get; set; }
         
+        [Option('w', "write", DefaultValue = @"doc.html", HelpText = "Output file with generated documentation.")]
+        public string OutputFile { get; set; }
+
         [HelpOption]
         public string GetUsage()
         {
@@ -40,22 +44,7 @@ namespace CSharpFormatting.Cli
                 .Select((line, i) => new CodeLine { Line = line, I = i })
                 .Where(t => t.Line.StartsWith("    "));
 
-            var codeBlocks = new List<List<CodeLine>>();
-            var previousLine = new CodeLine { I = -2 };
-            foreach (var codeLine in codeLines)
-            {
-                if (codeLine.I - 1 == previousLine.I) // same block
-                {
-                    codeBlocks.Last().Add(codeLine);
-                }
-                else // new block
-                {
-                    codeBlocks.Add(new List<CodeLine>());
-                    codeBlocks.Last().Add(codeLine);
-                }
-
-                previousLine = codeLine;
-            }
+            var codeBlocks = GetBlocks(codeLines);
 
             var cSharpBlocks = codeBlocks
                 .Where(b => b.First().Line.Trim().ToLower() == "[lang=csharp]")
@@ -83,7 +72,33 @@ namespace CSharpFormatting.Cli
                 Console.WriteLine(r.Message);
             }
 
+            var exportedHtml = new HtmlExporter().ExportAnnotationResult(annotationResult);
+            System.IO.File.WriteAllText(options.OutputFile, exportedHtml);
+            
             Console.ReadLine();
+        }
+
+        private static List<List<CodeLine>> GetBlocks(IEnumerable<CodeLine> codeLines)
+        {
+            var codeBlocks = new List<List<CodeLine>>();
+            var previousLine = new CodeLine { I = -2 };
+
+            foreach (var codeLine in codeLines)
+            {
+                if (codeLine.I - 1 == previousLine.I) // same block
+                {
+                    codeBlocks.Last().Add(codeLine);
+                }
+                else // new block
+                {
+                    codeBlocks.Add(new List<CodeLine>());
+                    codeBlocks.Last().Add(codeLine);
+                }
+
+                previousLine = codeLine;
+            }
+
+            return codeBlocks;
         }
 
         private static List<CodeLine> CleanBlock(List<CodeLine> block)

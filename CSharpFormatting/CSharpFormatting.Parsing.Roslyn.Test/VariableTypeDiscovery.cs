@@ -16,7 +16,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             var aChunk = result.TextChunks.First(ch => ch.TextValue == "a");
 
             ExpressionHelper.Check(expression, result);
-            Assert.AreEqual("Int32", aChunk.TooltipValue);
+            Assert.AreEqual("System.Int32", aChunk.TooltipValue);
         }
 
         [TestMethod]
@@ -28,7 +28,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             var varChunk = result.TextChunks.First(ch => ch.TextValue == "var");
 
             ExpressionHelper.Check(expression, result);
-            Assert.AreEqual("Int32", varChunk.TooltipValue);
+            Assert.AreEqual("System.Int32", varChunk.TooltipValue);
         }
 
         [TestMethod]
@@ -40,7 +40,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             var aMention = result.TextChunks.Where(ch => ch.TextValue == "a").Skip(1).First();
 
             ExpressionHelper.Check(expression, result);
-            Assert.AreEqual("Int32", aMention.TooltipValue);
+            Assert.AreEqual("System.Int32", aMention.TooltipValue);
         }
     }
 }
