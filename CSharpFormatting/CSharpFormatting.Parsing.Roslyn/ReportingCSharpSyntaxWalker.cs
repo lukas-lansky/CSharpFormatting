@@ -31,13 +31,27 @@ namespace CSharpFormatting.Parsing.Roslyn
                 {
                     var symbol = SemanticModel.GetSymbolInfo(node).Symbol;
 
-                    if (symbol is INamedTypeSymbol) // variable mention
+                    if (symbol is INamedTypeSymbol) // var, or variable mention
                     {
+                        if (node.ToString() == "var")
+                        {
+                            itc.CodeType = CodeType.Keyword;
+                        }
+                        else
+                        {
+                            itc.CodeType = CodeType.Type;
+                        }
                         itc.TooltipValue = GetTooltipForType(symbol as INamedTypeSymbol);
                     }
-                    else if (symbol is IFieldSymbol) // var
+                    else if (symbol is IFieldSymbol) // variable mention
                     {
+                        itc.CodeType = CodeType.Variable;
                         itc.TooltipValue = GetTooltipForType((symbol as IFieldSymbol).Type);
+                    }
+                    else if (symbol is IMethodSymbol) // method call
+                    {
+                        itc.CodeType = CodeType.Method;
+                        itc.TooltipValue = GetTooltipForMethod((symbol as IMethodSymbol));
                     }
                 }
 
@@ -45,6 +59,7 @@ namespace CSharpFormatting.Parsing.Roslyn
                 {
                     var symbol = SemanticModel.GetDeclaredSymbol(node);
                     var typeSymbol = symbol as IFieldSymbol;
+                    itc.CodeType = CodeType.Variable;
                     itc.TooltipValue = GetTooltipForType(typeSymbol?.Type);
                 }
             }
@@ -52,6 +67,7 @@ namespace CSharpFormatting.Parsing.Roslyn
             if (node is PredefinedTypeSyntax) // "int"
             {
                 var type = SemanticModel.GetTypeInfo(node).Type;
+                itc.CodeType = CodeType.Keyword;
                 itc.TooltipValue = GetTooltipForType(type);
             }
             
@@ -65,11 +81,19 @@ namespace CSharpFormatting.Parsing.Roslyn
             return $"{typeSymbol.ContainingNamespace}.{typeSymbol.Name}";
         }
 
+        private string GetTooltipForMethod(IMethodSymbol methodSymbol)
+        {
+            return $"{GetTooltipForType(methodSymbol.ContainingType)}.{methodSymbol.Name}";
+        }
+
         public override void VisitTrivia(SyntaxTrivia trivia)
         {
             var atch = new AnnotatedCodeChunk { TextValue = trivia.ToString() };
 
-            if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
+            var triviaKind = trivia.Kind();
+            if (triviaKind == SyntaxKind.SingleLineCommentTrivia
+                || triviaKind == SyntaxKind.MultiLineCommentTrivia
+                || triviaKind == SyntaxKind.XmlComment)
             {
                 atch.CodeType = CodeType.Comment;
             }

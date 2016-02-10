@@ -7,6 +7,8 @@
         Type,
         StringLiteral,
         Operator,
-        Comment
+        Comment,
+        Method,
+        Variable
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 namespace CSharpFormatting.Parsing.Roslyn.Test
 {
     [TestClass]
-    public class ErrorsAndWarnings
+    public class ErrorsAndWarningsTest
     {
         [TestMethod]
         public void MallformedCodeCompilationFails()

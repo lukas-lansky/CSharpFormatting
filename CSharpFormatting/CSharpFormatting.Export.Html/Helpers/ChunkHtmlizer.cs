@@ -29,6 +29,9 @@ namespace CSharpFormatting.Export.Html.Helpers
                 case CodeType.Type:
                     baseValue = $"<span{mouseAttributes} class='t'>{baseValue}</span>";
                     break;
+                case CodeType.Method:
+                    baseValue = $"<span{mouseAttributes} class='f'>{baseValue}</span>";
+                    break;
                 default:
                     if (mouseAttributes != "")
                     {

@@ -1,11 +1,12 @@
 ﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CSharpFormatting.Parsing.Roslyn.Test.Helper;
+using CSharpFormatting.Common;
 
 namespace CSharpFormatting.Parsing.Roslyn.Test
 {
     [TestClass]
-    public class VariableTypeDiscovery
+    public class VariableTypeDiscoveryTest
     {
         [TestMethod]
         public void VariableType()
@@ -16,6 +17,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             var aChunk = result.TextChunks.First(ch => ch.TextValue == "a");
 
             ExpressionHelper.Check(expression, result);
+            Assert.AreEqual(CodeType.Variable, aChunk.CodeType);
             Assert.AreEqual("System.Int32", aChunk.TooltipValue);
         }
 
@@ -28,6 +30,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             var varChunk = result.TextChunks.First(ch => ch.TextValue == "var");
 
             ExpressionHelper.Check(expression, result);
+            Assert.AreEqual(CodeType.Keyword, varChunk.CodeType);
             Assert.AreEqual("System.Int32", varChunk.TooltipValue);
         }
 
@@ -40,6 +43,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             var aMention = result.TextChunks.Where(ch => ch.TextValue == "a").Skip(1).First();
 
             ExpressionHelper.Check(expression, result);
+            Assert.AreEqual(CodeType.Variable, aMention.CodeType);
             Assert.AreEqual("System.Int32", aMention.TooltipValue);
         }
     }

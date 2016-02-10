@@ -53,10 +53,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ErrorsAndWarnings.cs" />
+    <Compile Include="ErrorsAndWarningsTest.cs" />
     <Compile Include="Helper\ExpressionHelper.cs" />
-    <Compile Include="TypeTypeDiscovery.cs" />
-    <Compile Include="VariableTypeDiscovery.cs" />
+    <Compile Include="MethodDiscoveryTest.cs" />
+    <Compile Include="TypeTypeDiscoveryTest.cs" />
+    <Compile Include="VariableTypeDiscoveryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

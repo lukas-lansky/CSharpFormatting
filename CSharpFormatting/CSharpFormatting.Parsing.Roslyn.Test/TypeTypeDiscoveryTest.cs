@@ -1,11 +1,12 @@
-﻿using CSharpFormatting.Parsing.Roslyn.Test.Helper;
+﻿using CSharpFormatting.Common;
+using CSharpFormatting.Parsing.Roslyn.Test.Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
 namespace CSharpFormatting.Parsing.Roslyn.Test
 {
     [TestClass]
-    class TypeTypeDiscovery
+    class TypeTypeDiscoveryTest
     {
         [TestMethod]
         public void DeclarationPredefinedTypeType()
@@ -16,6 +17,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             var intChunk = result.TextChunks.First(ch => ch.TextValue == "int");
 
             ExpressionHelper.Check(expression, result);
+            Assert.AreEqual(CodeType.Keyword, intChunk.CodeType);
             Assert.AreEqual("System.Int32", intChunk.TooltipValue);
         }
 
@@ -28,6 +30,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             var intChunk = result.TextChunks.First(ch => ch.TextValue == "Int32");
 
             ExpressionHelper.Check(expression, result);
+            Assert.AreEqual(CodeType.Type, intChunk.CodeType);
             Assert.AreEqual("System.Int32", intChunk.TooltipValue);
         }
 
@@ -40,6 +43,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             var intChunk = result.TextChunks.First(ch => ch.TextValue == "Int32");
 
             ExpressionHelper.Check(expression, result);
+            Assert.AreEqual(CodeType.Type, intChunk.CodeType);
             Assert.AreEqual("System.Int32", intChunk.TooltipValue);
         }
     }
