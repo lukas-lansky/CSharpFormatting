@@ -80,7 +80,7 @@ namespace CSharpFormatting.Parsing.Roslyn
         {
             return typeSymbol.ToDisplayString(
                 new SymbolDisplayFormat(
-                    typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces));
+                    typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces).AddKindOptions(SymbolDisplayKindOptions.IncludeTypeKeyword));
         }
 
         private string GetTooltipForMethod(IMethodSymbol methodSymbol)

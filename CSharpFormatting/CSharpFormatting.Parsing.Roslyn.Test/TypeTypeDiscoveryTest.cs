@@ -18,7 +18,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
 
             ExpressionHelper.Check(expression, result);
             Assert.AreEqual(CodeType.Keyword, intChunk.CodeType);
-            Assert.AreEqual("System.Int32", intChunk.TooltipValue);
+            Assert.AreEqual("struct System.Int32", intChunk.TooltipValue);
         }
 
         [TestMethod]
@@ -31,7 +31,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
 
             ExpressionHelper.Check(expression, result);
             Assert.AreEqual(CodeType.Type, intChunk.CodeType);
-            Assert.AreEqual("System.Int32", intChunk.TooltipValue);
+            Assert.AreEqual("struct System.Int32", intChunk.TooltipValue);
         }
 
         [TestMethod]
@@ -44,7 +44,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
 
             ExpressionHelper.Check(expression, result);
             Assert.AreEqual(CodeType.Type, intChunk.CodeType);
-            Assert.AreEqual("System.Int32", intChunk.TooltipValue);
+            Assert.AreEqual("struct System.Int32", intChunk.TooltipValue);
         }
     }
 }
