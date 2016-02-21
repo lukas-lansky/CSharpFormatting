@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using CSharpFormatting.Common;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -61,6 +60,17 @@ namespace CSharpFormatting.Parsing.Roslyn
                     var typeSymbol = symbol as IFieldSymbol;
                     itc.CodeType = CodeType.Variable;
                     itc.TooltipValue = GetTooltipForType(typeSymbol?.Type);
+                }
+
+                if (node is GenericNameSyntax)
+                {
+                    var symbol = SemanticModel.GetSymbolInfo(node).Symbol;
+
+                    if (symbol is INamedTypeSymbol)
+                    {
+                        itc.CodeType = CodeType.Type;
+                        itc.TooltipValue = GetTooltipForType(symbol as INamedTypeSymbol);
+                    }
                 }
             }
 

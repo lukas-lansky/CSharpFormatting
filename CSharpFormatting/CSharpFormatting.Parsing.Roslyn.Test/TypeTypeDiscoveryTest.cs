@@ -35,6 +35,21 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
         }
 
         [TestMethod]
+        public void DeclarationGenericTypeType()
+        {
+            var expression = "System.Tuple<int, int> a = System.Tuple.Create(1, 1);";
+            var result = new CSharpParser().Parse(expression);
+
+            System.Tuple<int, int> a = System.Tuple.Create(1, 1);
+
+            var intChunk = result.TextChunks.First(ch => ch.TextValue == "Tuple");
+
+            ExpressionHelper.Check(expression, result);
+            Assert.AreEqual(CodeType.Type, intChunk.CodeType);
+            Assert.AreEqual("class System.Tuple", intChunk.TooltipValue);
+        }
+
+        [TestMethod]
         public void InitializationTypeType()
         {
             var expression = "var a = new System.Int32();";
