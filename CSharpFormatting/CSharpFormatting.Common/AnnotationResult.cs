@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CSharpFormatting.Common.Chunk;
+using System.Collections.Generic;
 
 namespace CSharpFormatting.Common
 {

@@ -3,6 +3,7 @@ using CSharpFormatting.Common;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using CSharpFormatting.Common.Chunk;
 
 namespace CSharpFormatting.Parsing.Roslyn
 {

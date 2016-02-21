@@ -1,7 +1,10 @@
-﻿namespace CSharpFormatting.Common
+﻿using CSharpFormatting.Common.Chunk;
+using System.Collections.Generic;
+
+namespace CSharpFormatting.Common
 {
     public interface IExporter
     {
-        string ExportAnnotationResult(AnnotationResult annotationResult);
+        string ExportAnnotationResult(IEnumerable<IChunk> chunks);
     }
 }

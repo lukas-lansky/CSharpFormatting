@@ -42,10 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnnotationResult.cs" />
-    <Compile Include="AnnotatedTextChunk.cs" />
+    <Compile Include="Chunk\AnnotatedTextChunk.cs" />
     <Compile Include="CodeDiagnosticResult.cs" />
     <Compile Include="CodeType.cs" />
+    <Compile Include="Chunk\IChunk.cs" />
     <Compile Include="IExporter.cs" />
+    <Compile Include="Chunk\MarkdownChunk.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using CommandLine.Text;
+using CSharpFormatting.Common.Chunk;
 using CSharpFormatting.Export.Html;
 using System;
 using System.Collections.Generic;
@@ -72,7 +73,7 @@ namespace CSharpFormatting.Cli
                 Console.WriteLine(r.Message);
             }
 
-            var exportedHtml = new HtmlExporter().ExportAnnotationResult(annotationResult);
+            var exportedHtml = new HtmlExporter().ExportAnnotationResult(annotationResult.TextChunks.Cast<IChunk>());
             System.IO.File.WriteAllText(options.OutputFile, exportedHtml);
             
             Console.ReadLine();

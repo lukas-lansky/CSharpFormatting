@@ -5,22 +5,23 @@ using System.Reflection;
 using System.Linq;
 using System;
 using CSharpFormatting.Export.Html.Helpers;
+using CSharpFormatting.Common.Chunk;
 
 namespace CSharpFormatting.Export.Html
 {
     public sealed class HtmlExporter : IExporter
     {
-        public string ExportAnnotationResult(AnnotationResult annotationResult)
+        public string ExportAnnotationResult(IEnumerable<IChunk> chunks)
         {
             var headerFile = GetEmbeddedResource("CSharpFormatting.Export.Html.Static.header.html");
             var footerFile = GetEmbeddedResource("CSharpFormatting.Export.Html.Static.footer.html");
 
-            var body = ExportAnnotationResultBody(annotationResult.TextChunks);
+            var body = ExportAnnotationResultBody(chunks);
 
             return headerFile + body + footerFile;
         }
 
-        public string ExportAnnotationResultBody(IEnumerable<AnnotatedCodeChunk> chunks)
+        public string ExportAnnotationResultBody(IEnumerable<IChunk> chunks)
         {
             /*
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
@@ -48,15 +49,31 @@ namespace CSharpFormatting.Export.Html
             return bodyHeader + lineNumbers + "<td class='snippet'><pre class='fssnip highlighted'><code lang='csharp'>" + rawCode + bodyFooter + tooltipDivs;
         }
 
-        private string GetRawCode(IEnumerable<AnnotatedCodeChunk> chunks) =>
+        private string GetRawCode(IEnumerable<IChunk> chunks) =>
             string.Join(
                 "",
-                chunks.Select((ch, i) => new ChunkHtmlizer().HtmlizeChunkText(i, ch)));
+                chunks.Select((ch, i) => HtmlizeChunk(ch, i)));
         
-        private string GetTooltipDivs(IEnumerable<AnnotatedCodeChunk> chunks) =>
+        private string HtmlizeChunk(IChunk chunk, int i)
+        {
+            if (chunk is AnnotatedCodeChunk)
+            {
+                return new CodeChunkHtmlizer().HtmlizeChunkText(i, (AnnotatedCodeChunk)chunk);
+            }
+            else if (chunk is MarkdownChunk)
+            {
+                return new MarkdownSharp.Markdown().Transform(((MarkdownChunk)chunk).MarkdownSource);
+            }
+
+            throw new NotSupportedException();
+        }
+
+        private string GetTooltipDivs(IEnumerable<IChunk> chunks) =>
             string.Join(
                 Environment.NewLine,
-                chunks.Select((ch, i) => new ChunkHtmlizer().HtmlizeChunkTooltip(i, ch)));
+                chunks
+                    .Where(ch => ch is AnnotatedCodeChunk)
+                    .Select((ch, i) => new CodeChunkHtmlizer().HtmlizeChunkTooltip(i, (AnnotatedCodeChunk)ch)));
 
         private string GetLineNumberSpans(int count) =>
             string.Join(

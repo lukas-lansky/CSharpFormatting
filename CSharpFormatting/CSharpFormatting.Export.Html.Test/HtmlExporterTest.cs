@@ -1,4 +1,4 @@
-﻿using CSharpFormatting.Common;
+﻿using CSharpFormatting.Common.Chunk;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 
@@ -10,11 +10,7 @@ namespace CSharpFormatting.Export.Html.Test
         [TestMethod]
         public void OneLinerWithoutAnnotationsGetExported()
         {
-            var ar = new AnnotationResult(
-                new List<CodeDiagnosticResult>(),
-                new List<AnnotatedCodeChunk> { new AnnotatedCodeChunk { TextValue = "one line" } });
-
-            new HtmlExporter().ExportAnnotationResult(ar);
+            new HtmlExporter().ExportAnnotationResult(new List<IChunk> { new AnnotatedCodeChunk { TextValue = "one line" } });
         }
     }
 }

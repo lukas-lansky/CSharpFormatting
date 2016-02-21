@@ -1,6 +1,6 @@
-﻿namespace CSharpFormatting.Common
+﻿namespace CSharpFormatting.Common.Chunk
 {
-    public class AnnotatedCodeChunk
+    public struct AnnotatedCodeChunk : IChunk
     {
         public string TextValue { get; set; }
 

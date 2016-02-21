@@ -1,8 +1,9 @@
 ﻿using CSharpFormatting.Common;
+using CSharpFormatting.Common.Chunk;
 
 namespace CSharpFormatting.Export.Html.Helpers
 {
-    public sealed class ChunkHtmlizer
+    public sealed class CodeChunkHtmlizer
     {
         public string HtmlizeChunkText(int chunkId, AnnotatedCodeChunk chunk)
         {

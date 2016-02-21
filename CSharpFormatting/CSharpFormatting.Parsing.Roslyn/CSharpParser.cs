@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using System.IO;
 using Microsoft.CodeAnalysis.Scripting;
+using CSharpFormatting.Common.Chunk;
 
 namespace CSharpFormatting.Parsing.Roslyn
 {
