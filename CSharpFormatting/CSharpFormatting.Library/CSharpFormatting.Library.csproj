@@ -42,7 +42,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CSharpFormatter.cs" />
+    <Compile Include="MarkdownHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CSharpFormatting.Common\CSharpFormatting.Common.csproj">
+      <Project>{5a0e15fd-7f4c-47e7-a3fc-380aa885d20d}</Project>
+      <Name>CSharpFormatting.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CSharpFormatting.Export.Html\CSharpFormatting.Export.Html.csproj">
+      <Project>{cf779f98-b3fb-4625-bcd8-f96df6b1d121}</Project>
+      <Name>CSharpFormatting.Export.Html</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CSharpFormatting.Parsing.Roslyn\CSharpFormatting.Parsing.Roslyn.csproj">
+      <Project>{578a4ebe-d8bd-4aed-82b6-d1befc1d366c}</Project>
+      <Name>CSharpFormatting.Parsing.Roslyn</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
