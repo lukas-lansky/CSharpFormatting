@@ -9,6 +9,7 @@
         Operator,
         Comment,
         Method,
-        Variable
+        Variable,
+        Namespace
     }
 }

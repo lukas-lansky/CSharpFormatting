@@ -51,7 +51,12 @@ namespace CSharpFormatting.Parsing.Roslyn
                     else if (symbol is IMethodSymbol) // method call
                     {
                         itc.CodeType = CodeType.Method;
-                        itc.TooltipValue = GetTooltipForMethod((symbol as IMethodSymbol));
+                        itc.TooltipValue = GetTooltipForMethod(symbol as IMethodSymbol);
+                    }
+                    else if (symbol is INamespaceSymbol)
+                    {
+                        itc.CodeType = CodeType.Namespace;
+                        itc.TooltipValue = GetTooltipForNamespace(symbol as INamespaceSymbol);
                     }
                 }
 
@@ -85,26 +90,25 @@ namespace CSharpFormatting.Parsing.Roslyn
             {
                 itc.CodeType = CodeType.Keyword;
             }
-            
+                        
             AddItcAction(itc);
 
             base.VisitToken(token);
         }
 
         private string GetTooltipForType(ITypeSymbol typeSymbol)
-        {
-            return typeSymbol.ToDisplayString(
+            => typeSymbol.ToDisplayString(
                 new SymbolDisplayFormat(
                     typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces).AddKindOptions(SymbolDisplayKindOptions.IncludeTypeKeyword));
-        }
-
+        
         private string GetTooltipForMethod(IMethodSymbol methodSymbol)
-        {
-            return methodSymbol.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat
+            => methodSymbol.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat
                 .AddGenericsOptions(SymbolDisplayGenericsOptions.IncludeTypeParameters)
                 .AddParameterOptions(SymbolDisplayParameterOptions.IncludeName)
                 .AddMemberOptions(SymbolDisplayMemberOptions.IncludeType));
-        }
+
+        private string GetTooltipForNamespace(INamespaceSymbol namespaceSymbol)
+            => namespaceSymbol.ToDisplayString();
 
         public override void VisitTrivia(SyntaxTrivia trivia)
         {
