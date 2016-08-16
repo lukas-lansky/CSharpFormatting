@@ -58,6 +58,7 @@
     <Compile Include="MethodDiscoveryTest.cs" />
     <Compile Include="TypeTypeDiscoveryTest.cs" />
     <Compile Include="CommentDiscoveryTest.cs" />
+    <Compile Include="KeywordDiscoveryTest.cs" />
     <Compile Include="VariableTypeDiscoveryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -8,10 +8,11 @@ namespace CSharpFormatting.Parsing.Roslyn.Test.Helper
     {
         public static void Check(string expression, AnnotationResult result)
         {
-            Assert.AreEqual(0, result.DiagnosticResults.Count);
+            Assert.AreEqual(0, result.DiagnosticResults.Count, "There are errors or warnings");
             Assert.AreEqual(
                 expression,
-                string.Join("", result.TextChunks.Select(ch => ch.TextValue)));
+                string.Join("", result.TextChunks.Select(ch => ch.TextValue)),
+                "The expression is not reconstructed from chunks");
         }
     }
 }

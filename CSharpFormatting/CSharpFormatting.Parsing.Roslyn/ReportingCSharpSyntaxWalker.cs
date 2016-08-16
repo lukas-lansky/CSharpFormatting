@@ -74,12 +74,16 @@ namespace CSharpFormatting.Parsing.Roslyn
                     }
                 }
             }
-
-            if (node is PredefinedTypeSyntax) // "int"
+            else if (node is PredefinedTypeSyntax) // "int"
             {
                 var type = SemanticModel.GetTypeInfo(node).Type;
                 itc.CodeType = CodeType.Keyword;
                 itc.TooltipValue = GetTooltipForType(type);
+            }
+            
+            if (token.IsKeyword())
+            {
+                itc.CodeType = CodeType.Keyword;
             }
             
             AddItcAction(itc);

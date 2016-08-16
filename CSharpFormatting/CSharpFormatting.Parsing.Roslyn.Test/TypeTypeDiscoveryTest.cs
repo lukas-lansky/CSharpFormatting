@@ -39,9 +39,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
         {
             var expression = "System.Tuple<int, int> a = System.Tuple.Create(1, 1);";
             var result = new CSharpParser().Parse(expression);
-
-            System.Tuple<int, int> a = System.Tuple.Create(1, 1);
-
+            
             var intChunk = result.TextChunks.First(ch => ch.TextValue == "Tuple");
 
             ExpressionHelper.Check(expression, result);
