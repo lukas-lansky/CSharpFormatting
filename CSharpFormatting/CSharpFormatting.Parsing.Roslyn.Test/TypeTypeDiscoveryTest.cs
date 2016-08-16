@@ -6,7 +6,7 @@ using System.Linq;
 namespace CSharpFormatting.Parsing.Roslyn.Test
 {
     [TestClass]
-    class TypeTypeDiscoveryTest
+    public class TypeTypeDiscoveryTest
     {
         [TestMethod]
         public void DeclarationPredefinedTypeType()

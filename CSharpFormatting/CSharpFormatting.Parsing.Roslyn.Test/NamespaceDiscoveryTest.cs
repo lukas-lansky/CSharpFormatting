@@ -5,7 +5,7 @@ using System.Linq;
 namespace CSharpFormatting.Parsing.Roslyn.Test
 {
     [TestClass]
-    class NamespaceDiscoveryTest
+    public class NamespaceDiscoveryTest
     {
         [TestMethod]
         public void NamespaceInUsingIsRecognized()

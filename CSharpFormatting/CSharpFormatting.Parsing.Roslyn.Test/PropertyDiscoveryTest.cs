@@ -5,7 +5,7 @@ using System.Linq;
 namespace CSharpFormatting.Parsing.Roslyn.Test
 {
     [TestClass]
-    class PropertyDiscoveryTest
+    public class PropertyDiscoveryTest
     {
         [TestMethod]
         public void ItemPropertyOfTupleIsDiscovered()

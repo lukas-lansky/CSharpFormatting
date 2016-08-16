@@ -5,7 +5,7 @@ using System.Linq;
 namespace CSharpFormatting.Parsing.Roslyn.Test
 {
     [TestClass]
-    class MethodDiscoveryTest
+    public class MethodDiscoveryTest
     {
         [TestMethod]
         public void SimpleMethodIsMarkedAsMethod()
