@@ -10,6 +10,7 @@
         Comment,
         Method,
         Variable,
-        Namespace
+        Namespace,
+        Property
     }
 }

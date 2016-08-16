@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="ErrorsAndWarningsTest.cs" />
     <Compile Include="Helper\ExpressionHelper.cs" />
+    <Compile Include="PropertyDiscoveryTest.cs" />
     <Compile Include="NamespaceDiscoveryTest.cs" />
     <Compile Include="MethodDiscoveryTest.cs" />
     <Compile Include="TypeTypeDiscoveryTest.cs" />

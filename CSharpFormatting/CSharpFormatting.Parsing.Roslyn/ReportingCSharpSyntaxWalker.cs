@@ -58,6 +58,11 @@ namespace CSharpFormatting.Parsing.Roslyn
                         itc.CodeType = CodeType.Namespace;
                         itc.TooltipValue = GetTooltipForNamespace(symbol as INamespaceSymbol);
                     }
+                    else if (symbol is IPropertySymbol)
+                    {
+                        itc.CodeType = CodeType.Property;
+                        itc.TooltipValue = GetTooltipForProperty(symbol as IPropertySymbol);
+                    }
                 }
 
                 if (node is VariableDeclaratorSyntax) // variable name declaration
@@ -109,6 +114,9 @@ namespace CSharpFormatting.Parsing.Roslyn
 
         private string GetTooltipForNamespace(INamespaceSymbol namespaceSymbol)
             => namespaceSymbol.ToDisplayString();
+
+        private string GetTooltipForProperty(IPropertySymbol propertySymbol)
+            => propertySymbol.ToDisplayString();
 
         public override void VisitTrivia(SyntaxTrivia trivia)
         {
