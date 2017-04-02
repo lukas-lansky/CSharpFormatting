@@ -2,6 +2,7 @@
 using CSharpFormatting.Export.Html;
 using CSharpFormatting.Parsing.Roslyn;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,12 @@ namespace CSharpFormatting.Library
 {
     public class CSharpFormatter
     {
-        public string GetHtmlForMarkdownContent(string mdContent, string baseReferencePath = null)
+        /// <summary>
+        /// Throws `CompilationErrorException` when a compilation issue arises.
+        /// </summary>
+        public string GetHtmlForMarkdownContent(
+            string mdContent, string baseReferencePath = null,
+            bool failOnCompileWarning = false, bool failOnCompileError = true)
         {
             var inputFile = mdContent.Replace("\r\n", "\n").Replace("\r", "\n").Split('\n');
             var codeLines = inputFile
@@ -24,12 +30,10 @@ namespace CSharpFormatting.Library
                 .Select(MarkdownHelper.CleanBlock);
 
             var toCompile = new StringBuilder();
-            int localI = 1;
             foreach (var block in cSharpBlocks)
             {
                 foreach (var line in block)
                 {
-                    Console.WriteLine($"{localI++}, {line.I}: {line.Line}");
                     toCompile.AppendLine(line.Line);
                 }
             }
@@ -37,12 +41,22 @@ namespace CSharpFormatting.Library
             var parser = new CSharpParser();
             var annotationResult = parser.Parse(toCompile.ToString(), baseReferencePath);
 
-            Console.WriteLine();
-            Console.WriteLine(annotationResult.DiagnosticResults.Count().ToString());
-
+            var errors = new List<string>();
             foreach (var r in annotationResult.DiagnosticResults)
             {
-                Console.WriteLine(r.Message);
+                if (failOnCompileError && r.Severity == Common.DiagnosticSeverity.Error)
+                {
+                    errors.Add(r.Message);
+                }
+                
+                if (failOnCompileWarning && r.Severity == Common.DiagnosticSeverity.Warning)
+                {
+                    errors.Add(r.Message);
+                }
+            }
+            if (errors.Any())
+            {
+                throw new CompilationErrorException(errors);
             }
 
             var exportedHtml = new HtmlExporter().ExportAnnotationResult(annotationResult.TextChunks.Cast<IChunk>());
