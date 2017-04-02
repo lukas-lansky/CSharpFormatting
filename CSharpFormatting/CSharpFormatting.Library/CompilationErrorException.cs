@@ -9,7 +9,7 @@ namespace CSharpFormatting.Library
         public IEnumerable<string> Errors;
 
         public CompilationErrorException(IList<string> errors)
-            : base($"{errors.Count()} compilation errors encountered, cannot continue.")
+            : base($"{errors.Count()} compilation errors encountered, cannot continue.{Environment.NewLine}{string.Join(Environment.NewLine, errors)}")
         {
             Errors = errors;
         }

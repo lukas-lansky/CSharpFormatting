@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24627.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpFormatting.Library", "CSharpFormatting.Library\CSharpFormatting.Library.csproj", "{2B613D42-739D-4EDA-91F6-F23D539BBA85}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpFormatting.Parsing.Roslyn.Test", "CSharpFormatting.Parsing.Roslyn.Test\CSharpFormatting.Parsing.Roslyn.Test.csproj", "{1C93C003-0D32-4506-80C7-1835CBE8943B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpFormatting.Export.Html.Test", "CSharpFormatting.Export.Html.Test\CSharpFormatting.Export.Html.Test.csproj", "{B07B9E16-C597-4FE2-A091-C293EB301D45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpFormatting.Library.IntegrationTest", "CSharpFormatting.Library.IntegrationTest\CSharpFormatting.Library.IntegrationTest.csproj", "{D46C25AD-3079-41CF-A342-7BF3E0459927}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{B07B9E16-C597-4FE2-A091-C293EB301D45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B07B9E16-C597-4FE2-A091-C293EB301D45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B07B9E16-C597-4FE2-A091-C293EB301D45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D46C25AD-3079-41CF-A342-7BF3E0459927}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D46C25AD-3079-41CF-A342-7BF3E0459927}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D46C25AD-3079-41CF-A342-7BF3E0459927}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D46C25AD-3079-41CF-A342-7BF3E0459927}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
