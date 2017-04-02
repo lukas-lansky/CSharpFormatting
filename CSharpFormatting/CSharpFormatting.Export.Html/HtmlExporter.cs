@@ -23,18 +23,6 @@ namespace CSharpFormatting.Export.Html
 
         public string ExportAnnotationResultBody(IEnumerable<IChunk> chunks)
         {
-            /*
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">a</span>, <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">b</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="t">Fit</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="f">Line</span> ([|<span class="n">10.0</span>;<span class="n">20.0</span>;<span class="n">30.0</span>|], [|<span class="n">15.0</span>;<span class="n">20.0</span>;<span class="n">25.0</span>|])
-</code></pre></td>
-</tr>
-</table>
-
-            
-<div class="tip" id="fs1">val a : float<br /><br />Full name: Regression.a</div>            
-            */
-
             var bodyHeader = "<table class='pre'>";
             
             var rawCode = GetRawCode(chunks);

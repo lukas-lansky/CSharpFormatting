@@ -5,16 +5,19 @@ namespace CSharpFormatting.Cli
 {
     class Options
     {
-        [Option('r', "read", DefaultValue = @"C:\Source\mathnet-numerics\docs\content\Regression.md", HelpText = "CSharp source or Markdown file with documentation to be processed.")]
+        [Option('r', "read", HelpText = "CSharp source (.cs) or Markdown file (.md) with documentation to be processed.", Required = true)]
         public string InputFile { get; set; }
 
-        [Option('f', "references", DefaultValue = @"C:\Temp\Numerics", HelpText = "Base path for DLL reference resolution.")]
+        [Option('m', "format", DefaultValue = InputFormat.ByExtension, HelpText = "Input format definition: Markdown / Csharp / ByExtension", Required = false)]
+        public InputFormat InputFormat { get; set; }
+
+        [Option('f', "references", HelpText = "Base path for DLL reference resolution.", Required = false)]
         public string BaseReferencePath { get; set; }
 
-        [Option('v', "verbose", DefaultValue = true, HelpText = "Prints all messages to standard output.")]
+        [Option('v', "verbose", DefaultValue = false, HelpText = "Prints all messages to standard output.", Required = false)]
         public bool Verbose { get; set; }
 
-        [Option('w', "write", DefaultValue = @"doc.html", HelpText = "Output file with generated documentation.")]
+        [Option('w', "write", HelpText = "Output file with generated documentation.", Required = false)]
         public string OutputFile { get; set; }
 
         [HelpOption]
