@@ -1,31 +1,30 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CSharpFormatting.Common;
+﻿using CSharpFormatting.Common;
 using CSharpFormatting.Export.Html.Helpers;
 using CSharpFormatting.Common.Chunk;
+using Xunit;
 
 namespace CSharpFormatting.Export.Html.Test.Helpers
 {
-    [TestClass]
     public class ChunkHtmlizerTest
     {
-        [TestMethod]
+        [Fact]
         public void PlainChunkIsNotAnnotated()
         {
             var ch = new AnnotatedCodeChunk { TextValue = "just text" };
 
             var chHtmlized = new CodeChunkHtmlizer().HtmlizeChunkText(1, ch);
 
-            Assert.AreEqual("just text", chHtmlized);
+            Assert.Equal("just text", chHtmlized);
         }
 
-        [TestMethod]
+        [Fact]
         public void CommentCodeTypeIsTranslatedToClassAttribute()
         {
             var ch = new AnnotatedCodeChunk { TextValue = "// some comment", CodeType = CodeType.Comment };
 
             var chHtmlized = new CodeChunkHtmlizer().HtmlizeChunkText(1, ch);
 
-            Assert.AreEqual("<span class='c'>// some comment</span>", chHtmlized);
+            Assert.Equal("<span class='c'>// some comment</span>", chHtmlized);
         }
     }
 }

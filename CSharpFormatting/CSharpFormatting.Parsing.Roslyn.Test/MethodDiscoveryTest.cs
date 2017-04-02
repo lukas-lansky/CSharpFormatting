@@ -1,13 +1,12 @@
 ﻿using CSharpFormatting.Parsing.Roslyn.Test.Helper;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using Xunit;
 
 namespace CSharpFormatting.Parsing.Roslyn.Test
 {
-    [TestClass]
     public class MethodDiscoveryTest
     {
-        [TestMethod]
+        [Fact]
         public void SimpleMethodIsMarkedAsMethod()
         {
             var expression = "string.Join(\",\", new[]{\"a\", \"b\"})";
@@ -16,11 +15,11 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             var intChunk = result.TextChunks.First(ch => ch.TextValue == "Join");
             
             ExpressionHelper.Check(expression, result);
-            Assert.AreEqual(Common.CodeType.Method, intChunk.CodeType);
-            Assert.AreEqual("string string.Join(string separator, params string[] value)", intChunk.TooltipValue);
+            Assert.Equal(Common.CodeType.Method, intChunk.CodeType);
+            Assert.Equal("string string.Join(string separator, params string[] value)", intChunk.TooltipValue);
         }
 
-        [TestMethod]
+        [Fact]
         public void OverloadResolutionWorks()
         {
             var expression = "string.Join(\",\", new[]{2, 5})";
@@ -29,8 +28,8 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             var intChunk = result.TextChunks.First(ch => ch.TextValue == "Join");
 
             ExpressionHelper.Check(expression, result);
-            Assert.AreEqual(Common.CodeType.Method, intChunk.CodeType);
-            Assert.AreEqual("string string.Join<int>(string separator, System.Collections.Generic.IEnumerable<int> values)", intChunk.TooltipValue);
+            Assert.Equal(Common.CodeType.Method, intChunk.CodeType);
+            Assert.Equal("string string.Join<int>(string separator, System.Collections.Generic.IEnumerable<int> values)", intChunk.TooltipValue);
         }
     }
 }

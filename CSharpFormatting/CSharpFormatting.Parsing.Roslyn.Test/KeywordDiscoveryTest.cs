@@ -1,13 +1,12 @@
 ﻿using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CSharpFormatting.Parsing.Roslyn.Test.Helper;
+using Xunit;
 
 namespace CSharpFormatting.Parsing.Roslyn.Test
 {
-    [TestClass]
     public class KeywordDiscoveryTest
     {
-        [TestMethod]
+        [Fact]
         public void IfIsIdentifiedAsKeyword()
         {
             var expression = "if (System.Console.ReadLine() == \"a\") { System.Console.WriteLine(\"Oh!\"); }";
@@ -16,10 +15,10 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             var ifChunk = result.TextChunks.First(ch => ch.TextValue == "if");
 
             ExpressionHelper.Check(expression, result);
-            Assert.AreEqual(Common.CodeType.Keyword, ifChunk.CodeType);
+            Assert.Equal(Common.CodeType.Keyword, ifChunk.CodeType);
         }
 
-        [TestMethod]
+        [Fact]
         public void ClassIsIdentifiedAsKeyword()
         {
             var expression = "public class Implementation {  }";
@@ -29,8 +28,8 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             var classChunk = result.TextChunks.First(ch => ch.TextValue == "class");
 
             ExpressionHelper.Check(expression, result);
-            Assert.AreEqual(Common.CodeType.Keyword, classChunk.CodeType);
-            Assert.AreEqual(Common.CodeType.Keyword, publicChunk.CodeType);
+            Assert.Equal(Common.CodeType.Keyword, classChunk.CodeType);
+            Assert.Equal(Common.CodeType.Keyword, publicChunk.CodeType);
         }
     }
 }

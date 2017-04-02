@@ -1,13 +1,12 @@
 ﻿using CSharpFormatting.Parsing.Roslyn.Test.Helper;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using Xunit;
 
 namespace CSharpFormatting.Parsing.Roslyn.Test
 {
-    [TestClass]
     public class NamespaceDiscoveryTest
     {
-        [TestMethod]
+        [Fact]
         public void NamespaceInUsingIsRecognized()
         {
             var expression = "using System.Collections.Generic;";
@@ -16,8 +15,8 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             var namespaceChunk = result.TextChunks.First(ch => ch.TextValue == "Generic");
             
             ExpressionHelper.Check(expression, result);
-            Assert.AreEqual(Common.CodeType.Namespace, namespaceChunk.CodeType);
-            Assert.AreEqual("System.Collections.Generic", namespaceChunk.TooltipValue);
+            Assert.Equal(Common.CodeType.Namespace, namespaceChunk.CodeType);
+            Assert.Equal("System.Collections.Generic", namespaceChunk.TooltipValue);
         }
     }
 }
