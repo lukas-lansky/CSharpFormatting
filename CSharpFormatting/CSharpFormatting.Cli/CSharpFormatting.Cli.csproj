@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Example\Program.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Compile Include="InputFormat.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />
@@ -56,6 +59,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Example\Regression.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Example\Script.csx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />

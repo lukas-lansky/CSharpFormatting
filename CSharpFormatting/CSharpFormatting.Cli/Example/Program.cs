@@ -65,8 +65,8 @@ namespace CSharpFormatting.Cli
                 if (inputFormat == InputFormat.Markdown)
                 {
                     formatter.SaveHtmlForMarkdownFile(
-                        inputFile.FullName,
-                        outputFile,
+                        options.InputFile,
+                        options.OutputFile,
                         options.BaseReferencePath,
                         options.FailOnCompileWarning,
                         options.FailOnCompileError);
@@ -74,8 +74,8 @@ namespace CSharpFormatting.Cli
                 else
                 {
                     formatter.SaveHtmlForCsxFile(
-                        inputFile.FullName,
-                        outputFile,
+                        options.InputFile,
+                        options.OutputFile,
                         options.BaseReferencePath,
                         options.FailOnCompileWarning,
                         options.FailOnCompileError);

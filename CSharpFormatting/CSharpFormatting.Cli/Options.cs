@@ -5,22 +5,22 @@ namespace CSharpFormatting.Cli
 {
     class Options
     {
-        [Option('r', "read", HelpText = "CSharp source (.cs, .csx) or Markdown file (.md) with documentation to be processed.", Required = true)]
+        [Option('r', "read", HelpText = "CSharp source (.cs, .csx), or Markdown file (.md) to be processed.", Required = true)]
         public string InputFile { get; set; }
 
-        [Option('m', "format", DefaultValue = InputFormat.ByExtension, HelpText = "Input format definition: Markdown / Csharp / ByExtension", Required = false)]
+        [Option('m', "format", DefaultValue = InputFormat.ByExtension, HelpText = "Input format definition: Markdown / Csharp / ByExtension.", Required = false)]
         public InputFormat InputFormat { get; set; }
 
         [Option('f', "references", HelpText = "Base path for DLL reference resolution.", Required = false)]
         public string BaseReferencePath { get; set; }
 
-        [Option('v', "verbose", DefaultValue = false, HelpText = "Prints all messages to standard output.", Required = false)]
+        [Option('v', "verbose", DefaultValue = false, HelpText = "Talk more about the processing.", Required = false)]
         public bool Verbose { get; set; }
 
-        [Option('w', "write", HelpText = "Output file with generated documentation.", Required = false)]
+        [Option('w', "write", HelpText = "Path of the output file.", Required = false)]
         public string OutputFile { get; set; }
 
-        [Option('o', "overwrite", DefaultValue = false, HelpText = "Overwrite the file on the output", Required = false)]
+        [Option('o', "overwrite", DefaultValue = false, HelpText = "Overwrite the file on the output.", Required = false)]
         public bool OverwriteOutputFile { get; set; }
 
         [Option('a', "failOnCompileWarning", DefaultValue = false, HelpText = "Fail the processing when a C# warning is encountered.", Required = false)]
