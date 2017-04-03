@@ -5,6 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Static\footer.html" />
+    <None Remove="Static\header.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Static\footer.html" />
+    <EmbeddedResource Include="Static\header.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Markdown" Version="2.2.1" />
   </ItemGroup>
 
