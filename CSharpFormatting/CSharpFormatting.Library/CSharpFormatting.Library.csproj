@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeLine.cs" />
     <Compile Include="CompilationErrorException.cs" />
     <Compile Include="CSharpFormatter.cs" />
     <Compile Include="MarkdownHelper.cs" />

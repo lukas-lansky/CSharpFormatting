@@ -44,10 +44,4 @@ namespace CSharpFormatting.Library
             return blockWithoutLeadingSpaces;
         }
     }
-
-    internal struct CodeLine
-    {
-        public string Line;
-        public int I;
-    }
 }

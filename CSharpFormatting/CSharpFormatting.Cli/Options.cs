@@ -5,10 +5,10 @@ namespace CSharpFormatting.Cli
 {
     class Options
     {
-        [Option('r', "read", HelpText = "CSharp source (.cs, .csx), or Markdown file (.md) to be processed.", Required = true)]
+        [Option('r', "read", HelpText = "CSharp (.cs), CSharp script (.csx), or Markdown file (.md) to be processed.", Required = true)]
         public string InputFile { get; set; }
 
-        [Option('m', "format", DefaultValue = InputFormat.ByExtension, HelpText = "Input format definition: Markdown / Csharp / ByExtension.", Required = false)]
+        [Option('m', "format", DefaultValue = InputFormat.ByExtension, HelpText = "Input format definition: Markdown / Csharp / CsharpScript / ByExtension.", Required = false)]
         public InputFormat InputFormat { get; set; }
 
         [Option('f', "references", HelpText = "Base path for DLL reference resolution.", Required = false)]

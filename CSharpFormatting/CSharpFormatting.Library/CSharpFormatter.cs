@@ -18,11 +18,7 @@ namespace CSharpFormatting.Library
             string mdContent, string baseReferencePath = null,
             bool failOnCompileWarning = false, bool failOnCompileError = true)
         {
-            var inputFile = mdContent.Replace("\r\n", "\n").Replace("\r", "\n").Split('\n');
-            var codeLines = inputFile
-                .Select((line, i) => new CodeLine { Line = line, I = i })
-                .Where(t => t.Line.StartsWith("    "));
-
+            var codeLines = CodeLine.GetCodeLines(mdContent);
             var codeBlocks = MarkdownHelper.GetBlocks(codeLines);
 
             var cSharpBlocks = codeBlocks
@@ -123,6 +119,28 @@ namespace CSharpFormatting.Library
             bool failOnCompileWarning = false, bool failOnCompileError = true)
         {
             File.WriteAllText(outputFilePath, GetHtmlForCsxContent(csxContent, baseReferencePath, failOnCompileWarning, failOnCompileError));
+        }
+
+        public string GetHtmlForCsContent(string csContent, string baseReferencePath = null,
+            bool failOnCompileWarning = false, bool failOnCompileError = true)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetHtmlForCsFile(string filePath, string baseReferencePath = null,
+            bool failOnCompileWarning = false, bool failOnCompileError = true)
+            => GetHtmlForCsContent(File.ReadAllText(filePath), baseReferencePath, failOnCompileWarning, failOnCompileError);
+
+        public void SaveHtmlForCsFile(string inputFilePath, string outputFilePath, string baseReferencePath = null,
+            bool failOnCompileWarning = false, bool failOnCompileError = true)
+        {
+            File.WriteAllText(outputFilePath, GetHtmlForCsFile(inputFilePath, baseReferencePath, failOnCompileWarning, failOnCompileError));
+        }
+
+        public void SaveHtmlForCsContent(string csxContent, string outputFilePath, string baseReferencePath = null,
+            bool failOnCompileWarning = false, bool failOnCompileError = true)
+        {
+            File.WriteAllText(outputFilePath, GetHtmlForCsContent(csxContent, baseReferencePath, failOnCompileWarning, failOnCompileError));
         }
     }
 }
