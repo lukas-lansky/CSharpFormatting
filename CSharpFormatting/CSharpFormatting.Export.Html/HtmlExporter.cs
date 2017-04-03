@@ -50,7 +50,7 @@ namespace CSharpFormatting.Export.Html
             }
             else if (chunk is MarkdownChunk)
             {
-                return new MarkdownSharp.Markdown().Transform(((MarkdownChunk)chunk).MarkdownSource);
+                return new HeyRed.MarkdownSharp.Markdown().Transform(((MarkdownChunk)chunk).MarkdownSource);
             }
 
             throw new NotSupportedException();
@@ -77,9 +77,7 @@ namespace CSharpFormatting.Export.Html
 
         private string GetEmbeddedResource(string resourceName)
         {
-            var assembly = Assembly.GetExecutingAssembly();
-
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (Stream stream = typeof(HtmlExporter).GetTypeInfo().Assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))
             {
                 return reader.ReadToEnd();
