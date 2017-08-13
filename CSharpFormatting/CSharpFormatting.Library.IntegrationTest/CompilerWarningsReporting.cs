@@ -2,7 +2,7 @@
 
 namespace CSharpFormatting.Library.IntegrationTest
 {
-    public class CSharpFormatterIntegration
+    public class CompilerWarningsReporting
     {
         [Fact]
         public void LineCanBeTranslatedToHtml()

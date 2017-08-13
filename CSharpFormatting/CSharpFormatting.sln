@@ -1,27 +1,29 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.10
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpFormatting.Library", "CSharpFormatting.Library\CSharpFormatting.Library.csproj", "{2B613D42-739D-4EDA-91F6-F23D539BBA85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpFormatting.Library", "CSharpFormatting.Library\CSharpFormatting.Library.csproj", "{2B613D42-739D-4EDA-91F6-F23D539BBA85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpFormatting.Cli", "CSharpFormatting.Cli\CSharpFormatting.Cli.csproj", "{64274EC2-C713-40CE-874F-3D33052AEB57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpFormatting.Cli", "CSharpFormatting.Cli\CSharpFormatting.Cli.csproj", "{64274EC2-C713-40CE-874F-3D33052AEB57}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Export", "Export", "{ECEB5271-DFFD-4DB0-B22A-E1C5BA130897}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpFormatting.Export.Html", "CSharpFormatting.Export.Html\CSharpFormatting.Export.Html.csproj", "{CF779F98-B3FB-4625-BCD8-F96DF6B1D121}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpFormatting.Export.Html", "CSharpFormatting.Export.Html\CSharpFormatting.Export.Html.csproj", "{CF779F98-B3FB-4625-BCD8-F96DF6B1D121}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Parsing", "Parsing", "{9572BBF4-D5AB-413B-BCC0-8DDDEE803127}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpFormatting.Parsing.Roslyn", "CSharpFormatting.Parsing.Roslyn\CSharpFormatting.Parsing.Roslyn.csproj", "{578A4EBE-D8BD-4AED-82B6-D1BEFC1D366C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpFormatting.Parsing.Roslyn", "CSharpFormatting.Parsing.Roslyn\CSharpFormatting.Parsing.Roslyn.csproj", "{578A4EBE-D8BD-4AED-82B6-D1BEFC1D366C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpFormatting.Common", "CSharpFormatting.Common\CSharpFormatting.Common.csproj", "{5A0E15FD-7F4C-47E7-A3FC-380AA885D20D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpFormatting.Common", "CSharpFormatting.Common\CSharpFormatting.Common.csproj", "{5A0E15FD-7F4C-47E7-A3FC-380AA885D20D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpFormatting.Parsing.Roslyn.Test", "CSharpFormatting.Parsing.Roslyn.Test\CSharpFormatting.Parsing.Roslyn.Test.csproj", "{1C93C003-0D32-4506-80C7-1835CBE8943B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpFormatting.Parsing.Roslyn.Test", "CSharpFormatting.Parsing.Roslyn.Test\CSharpFormatting.Parsing.Roslyn.Test.csproj", "{1C93C003-0D32-4506-80C7-1835CBE8943B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpFormatting.Export.Html.Test", "CSharpFormatting.Export.Html.Test\CSharpFormatting.Export.Html.Test.csproj", "{B07B9E16-C597-4FE2-A091-C293EB301D45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpFormatting.Export.Html.Test", "CSharpFormatting.Export.Html.Test\CSharpFormatting.Export.Html.Test.csproj", "{B07B9E16-C597-4FE2-A091-C293EB301D45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpFormatting.Library.IntegrationTest", "CSharpFormatting.Library.IntegrationTest\CSharpFormatting.Library.IntegrationTest.csproj", "{D46C25AD-3079-41CF-A342-7BF3E0459927}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpFormatting.Library.IntegrationTest", "CSharpFormatting.Library.IntegrationTest\CSharpFormatting.Library.IntegrationTest.csproj", "{D46C25AD-3079-41CF-A342-7BF3E0459927}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpFormatting.Library.Test", "CSharpFormatting.Library.Test\CSharpFormatting.Library.Test.csproj", "{456E12E7-B05E-4F5D-AA3A-672E99EBCBB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,10 @@ Global
 		{D46C25AD-3079-41CF-A342-7BF3E0459927}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D46C25AD-3079-41CF-A342-7BF3E0459927}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D46C25AD-3079-41CF-A342-7BF3E0459927}.Release|Any CPU.Build.0 = Release|Any CPU
+		{456E12E7-B05E-4F5D-AA3A-672E99EBCBB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{456E12E7-B05E-4F5D-AA3A-672E99EBCBB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{456E12E7-B05E-4F5D-AA3A-672E99EBCBB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{456E12E7-B05E-4F5D-AA3A-672E99EBCBB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

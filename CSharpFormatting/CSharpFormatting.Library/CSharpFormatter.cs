@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace CSharpFormatting.Library
 {
@@ -18,24 +17,11 @@ namespace CSharpFormatting.Library
             string mdContent, string baseReferencePath = null,
             bool failOnCompileWarning = false, bool failOnCompileError = true)
         {
-            var codeLines = CodeLine.GetCodeLines(mdContent);
-            var codeBlocks = MarkdownHelper.GetBlocks(codeLines);
-
-            var cSharpBlocks = codeBlocks
-                .Where(b => b.First().Line.Trim().ToLower() == "[lang=csharp]")
-                .Select(MarkdownHelper.CleanBlock);
-
-            var toCompile = new StringBuilder();
-            foreach (var block in cSharpBlocks)
-            {
-                foreach (var line in block)
-                {
-                    toCompile.AppendLine(line.Line);
-                }
-            }
+            var sourceDocument = new SourceDocument(mdContent);
+            var (codePart, lineNumberTranslation) = sourceDocument.GetCodeDocument();
 
             var parser = new CSharpParser();
-            var annotationResult = parser.Parse(toCompile.ToString(), baseReferencePath);
+            var annotationResult = parser.Parse(codePart.ToString(), baseReferencePath);
 
             var errors = new List<string>();
             foreach (var r in annotationResult.DiagnosticResults)
@@ -55,11 +41,15 @@ namespace CSharpFormatting.Library
                 throw new CompilationErrorException(errors);
             }
 
-            var exportedHtml = new HtmlExporter().ExportAnnotationResult(annotationResult.TextChunks.Cast<IChunk>());
+            var compilationResult = annotationResult.TextChunks.Cast<IChunk>().ToList();
+            SourceDocument.FixLineNumbers(compilationResult, lineNumberTranslation);
+            var allChunks = SourceDocument.ReturnMdChunksIntoCompilationResults(compilationResult, sourceDocument.MarkDownBlocks.ToList());
+
+            var exportedHtml = new HtmlExporter().ExportAnnotationResult(allChunks);
 
             return exportedHtml;
         }
-
+        
         public string GetHtmlForMarkdownFile(string filePath, string baseReferencePath = null,
             bool failOnCompileWarning = false, bool failOnCompileError = true)
             => GetHtmlForMarkdownContent(File.ReadAllText(filePath), baseReferencePath, failOnCompileWarning, failOnCompileError);

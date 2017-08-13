@@ -13,6 +13,11 @@ namespace CSharpFormatting.Parsing.Roslyn
     {
         public AnnotationResult Parse(string code, string baseDirectory = null)
         {
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                return new AnnotationResult(new List<CodeDiagnosticResult>(), new List<AnnotatedCodeChunk>());
+            }
+
             var options = ScriptOptions.Default;
 
             if (baseDirectory != null)

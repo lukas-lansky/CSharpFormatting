@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Markdown" Version="2.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CSharpFormatting.Common\CSharpFormatting.Common.csproj" />
     <ProjectReference Include="..\CSharpFormatting.Export.Html\CSharpFormatting.Export.Html.csproj" />
     <ProjectReference Include="..\CSharpFormatting.Parsing.Roslyn\CSharpFormatting.Parsing.Roslyn.csproj" />

@@ -2,5 +2,6 @@
 {
     public interface IChunk
     {
+        int LineNumber { get; set; }
     }
 }
