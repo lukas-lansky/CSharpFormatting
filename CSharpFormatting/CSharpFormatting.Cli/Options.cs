@@ -71,6 +71,19 @@ namespace CSharpFormatting.Cli
                 return (4, $"Fatal: Output file ({OutputFile}) already exists and you did not set `overwrite` command line argument to `true`.");
             }
 
+            if (!string.IsNullOrWhiteSpace(BaseReferencePath))
+            {
+                if (!Path.IsPathRooted(BaseReferencePath))
+                {
+                    BaseReferencePath = Path.Combine(Directory.GetCurrentDirectory(), BaseReferencePath);
+                }
+
+                if (!Directory.Exists(BaseReferencePath))
+                {
+                    return (5, $"Fatal: Reference path '{BaseReferencePath}' provided, but does not exist.");
+                }
+            }
+
             return null;
         }
     }

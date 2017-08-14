@@ -6,6 +6,7 @@ using System.Linq;
 using System;
 using CSharpFormatting.Export.Html.Helpers;
 using CSharpFormatting.Common.Chunk;
+using System.Text;
 
 namespace CSharpFormatting.Export.Html
 {
@@ -16,25 +17,51 @@ namespace CSharpFormatting.Export.Html
             var headerFile = GetEmbeddedResource("CSharpFormatting.Export.Html.Static.header.html");
             var footerFile = GetEmbeddedResource("CSharpFormatting.Export.Html.Static.footer.html");
 
-            var body = ExportAnnotationResultBody(chunks);
-
+            var currentBlock = new List<IChunk>();
+            var body = new StringBuilder();
+            foreach (var chunk in chunks)
+            {
+                if (currentBlock.Any() && currentBlock.Last().GetType() != chunk.GetType())
+                {
+                    body.Append(ExportAnnotationResultBody(currentBlock));
+                    currentBlock = new List<IChunk> { chunk };
+                }
+                else
+                {
+                    currentBlock.Add(chunk);
+                }
+            }
+            if (currentBlock.Any())
+            {
+                body.Append(ExportAnnotationResultBody(currentBlock));
+            }
+            
             return headerFile + body + footerFile;
         }
 
         public string ExportAnnotationResultBody(IEnumerable<IChunk> chunks)
         {
-            var bodyHeader = "<table class='pre'>";
-            
-            var rawCode = GetRawCode(chunks);
+            if (chunks.First() is AnnotatedCodeChunk)
+            {
+                var bodyHeader = "<table class='pre'>";
 
-            var lineCount = GetLineCount(rawCode);
-            var lineNumbers = "<tr><td class='lines'><pre class='fssnip' style='text-align:right'>" + GetLineNumberSpans(lineCount) + "</pre></td>";
+                var rawCode = GetRawCode(chunks);
 
-            var bodyFooter = "</table>";
+                var lineCount = GetLineCount(rawCode);
+                var lineNumbers = "<tr><td class='lines'><pre class='fssnip' style='text-align:right'>" + GetLineNumberSpans(lineCount) + "</pre></td>";
 
-            var tooltipDivs = GetTooltipDivs(chunks);
+                var bodyFooter = "</table>";
 
-            return bodyHeader + lineNumbers + "<td class='snippet'><pre class='fssnip highlighted'><code lang='csharp'>" + rawCode + bodyFooter + tooltipDivs;
+                var tooltipDivs = GetTooltipDivs(chunks);
+
+                return bodyHeader + lineNumbers + "<td class='snippet'><pre class='fssnip highlighted'><code lang='csharp'>" + rawCode + bodyFooter + tooltipDivs;
+            }
+            else
+            {
+                return GetRawCode(chunks);
+            }
+
+            throw new NotSupportedException();
         }
 
         private string GetRawCode(IEnumerable<IChunk> chunks) =>
