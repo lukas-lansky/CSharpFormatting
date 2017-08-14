@@ -7,22 +7,36 @@ namespace CSharpFormatting.Library
     /// <summary>
     /// Line of code with its index from the original input file.
     /// </summary>
-    public struct SourceLine
+    public class SourceLine
     {
         /// <summary>
         /// The line of code.
         /// </summary>
-        public string Line;
+        public readonly string Line;
 
         /// <summary>
         /// Index of the line of code in the original input file.
         /// </summary>
-        public int I;
+        public readonly int I;
 
         /// <summary>
         /// Is this code line?
         /// </summary>
-        public bool Code;
+        public readonly bool Code;
+
+        public SourceLine(string line, int i, bool? code = null)
+        {
+            I = i;
+
+            Code = code ?? false;
+            if (code == null && IsCodeLine(line))
+            {
+                Code = true;
+                line = RemoveCodePrefix(line);
+            }
+
+            Line = line;
+        }
 
         /// <summary>
         /// Helper method for parsing file into a list of `CodeLine`s.
@@ -30,7 +44,7 @@ namespace CSharpFormatting.Library
         public static IList<SourceLine> GetSourceLines(string file)
             => file
                 .Replace("\r\n", "\n").Replace("\r", "\n").Split('\n')
-                .Select((line, i) => new SourceLine { Line = line, I = i, Code = IsCodeLine(line) })
+                .Select((line, i) => new SourceLine(line, i))
                 .ToList();
 
         public static bool IsCodeLine(string line)

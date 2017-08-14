@@ -6,9 +6,9 @@ using System.Text;
 
 namespace CSharpFormatting.Library
 {
-    public struct SourceDocument
+    public class SourceDocument
     {
-        public IList<SourceBlock> Blocks;
+        public readonly IReadOnlyList<SourceBlock> Blocks;
 
         public IEnumerable<SourceBlock> CodeBlocks => Blocks.Where(b => b.Code);
 
@@ -16,7 +16,7 @@ namespace CSharpFormatting.Library
 
         public SourceDocument(string markdownContent)
         {
-            Blocks = SourceBlock.GetBlocks(SourceLine.GetSourceLines(markdownContent));
+            Blocks = SourceBlock.GetBlocks(SourceLine.GetSourceLines(markdownContent)) as IReadOnlyList<SourceBlock>;
         }
 
         public (string codePart, Dictionary<int, int> lineNumberTranslation) GetCodeDocument()
@@ -52,7 +52,7 @@ namespace CSharpFormatting.Library
             var mI = 0;
             for (var i = 0; i < compilationResults.Count; i++)
             {
-                while (mI < markdownBlocks.Count && markdownBlocks[mI].Lines.First().I > compilationResults[i].LineNumber)
+                while (mI < markdownBlocks.Count && markdownBlocks[mI].Lines.First().I < compilationResults[i].LineNumber)
                 {
                     r.Add(new MarkdownChunk { LineNumber = markdownBlocks[mI].Lines.First().I, MarkdownSource = string.Join(Environment.NewLine, markdownBlocks[mI].Lines.Select(l => l.Line)) });
                     mI++;

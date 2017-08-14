@@ -6,54 +6,81 @@ namespace CSharpFormatting.Library
     /// <summary>
     /// Maximal continous block of code/md from source file.
     /// </summary>
-    public struct SourceBlock
+    public class SourceBlock
     {
         public bool Code => Lines.FirstOrDefault().Code;
         
-        public IList<SourceLine> Lines;
+        public readonly IReadOnlyList<SourceLine> Lines;
+
+        public SourceBlock(IEnumerable<SourceLine> linesOfBlock)
+        {
+            System.Diagnostics.Debug.Assert(linesOfBlock.Select(l => l.Code).Distinct().Count() <= 1);
+
+            Lines = linesOfBlock.SkipWhile(l => l.Line.Trim().StartsWith("[")).ToList();
+        }
+
+        public bool IsEmpty()
+            => Lines.All(l => string.IsNullOrWhiteSpace(l.Line));
 
         public static IList<SourceBlock> GetBlocks(IEnumerable<SourceLine> codeLines)
+            => MergeConsecutiveBlocksOfSameType(RemoveEmptyBlocks(GetNaiveBlocks(codeLines))).ToList();
+
+        private static IEnumerable<SourceBlock> GetNaiveBlocks(IEnumerable<SourceLine> codeLines)
         {
             var codeBlocks = new List<SourceBlock>();
-            SourceLine? previousLine = null;
+            List<SourceLine> currentBlock = null;
 
             foreach (var codeLine in codeLines)
             {
-                if (codeLine.Code == previousLine?.Code) // same block
+                if (codeLine.Code == currentBlock?.First().Code) // same block
                 {
-                    codeBlocks.Last().Lines.Add(codeLine);
+                    currentBlock.Add(codeLine);
                 }
                 else // new block
                 {
-                    codeBlocks.Add(new SourceBlock { Lines = new List<SourceLine>()});
-                    codeBlocks.Last().Lines.Add(codeLine);
-                }
+                    if (currentBlock != null)
+                    {
+                        codeBlocks.Add(new SourceBlock(currentBlock));
+                    }
 
-                previousLine = codeLine;
+                    currentBlock = new List<SourceLine> { codeLine };
+                }
             }
 
-            return codeBlocks.Select(CleanBlock).ToList();
+            if (currentBlock != null)
+            {
+                codeBlocks.Add(new SourceBlock(currentBlock));
+            }
+
+            return codeBlocks.ToList();
         }
 
-        internal static SourceBlock CleanBlock(SourceBlock block)
+        private static IEnumerable<SourceBlock> RemoveEmptyBlocks(IEnumerable<SourceBlock> blocks)
+            => blocks.Where(b => !b.IsEmpty());
+
+        private static IEnumerable<SourceBlock> MergeConsecutiveBlocksOfSameType(IEnumerable<SourceBlock> blocks)
         {
-            if (!block.Code)
+            SourceBlock previousBlock = null;
+            foreach (var block in blocks)
             {
-                return block;
+                if (previousBlock?.Code == block.Code)
+                {
+                    previousBlock = new SourceBlock(previousBlock.Lines.Concat(block.Lines));
+                    continue;
+                }
+                else if (previousBlock != null)
+                {
+                    yield return previousBlock;
+
+                }
+
+                previousBlock = block;
             }
 
-            var blockWithoutCSharp = block.Lines.Skip(1);
-
-            if (blockWithoutCSharp.First().Line.Trim().ToLower() == "[hide]")
+            if (previousBlock != null)
             {
-                blockWithoutCSharp = blockWithoutCSharp.Skip(1);
+                yield return previousBlock;
             }
-
-            var blockWithoutLeadingSpaces = blockWithoutCSharp
-                .Select(line => new SourceLine { I = line.I, Line = SourceLine.RemoveCodePrefix(line.Line), Code = line.Code })
-                .ToList();
-
-            return new SourceBlock() { Lines = blockWithoutLeadingSpaces };
         }
     }
 }
