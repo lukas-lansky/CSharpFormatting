@@ -24,12 +24,11 @@ namespace CSharpFormatting.Library
         /// </summary>
         public readonly bool Code;
 
-        public SourceLine(string line, int i, bool? code = null)
+        public SourceLine(string line, int i)
         {
             I = i;
-
-            Code = code ?? false;
-            if (code == null && IsCodeLine(line))
+            
+            if (IsCodeLine(line))
             {
                 Code = true;
                 line = RemoveCodePrefix(line);
