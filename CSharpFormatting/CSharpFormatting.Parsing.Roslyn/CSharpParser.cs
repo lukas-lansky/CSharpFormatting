@@ -55,9 +55,9 @@ namespace CSharpFormatting.Parsing.Roslyn
 
         private IEnumerable<AnnotatedCodeChunk> ParseSyntaxTree(SyntaxTree syntaxTree, SemanticModel sm)
         {
-            var chunks = new List<AnnotatedCodeChunk>();
-            new ReportingCSharpSyntaxWalker(itc => chunks.Add(itc), sm).Visit(syntaxTree.GetRoot());
-            return chunks;
+            var chunks = new List<(int position, AnnotatedCodeChunk chunk)>();
+            new ReportingCSharpSyntaxWalker((pos, itc) => chunks.Add((pos, itc)), sm).Visit(syntaxTree.GetRoot());
+            return chunks.OrderBy(ch => ch.position).Select(ch => ch.chunk);
         }
         
         private Common.DiagnosticSeverity MapSeverity(Microsoft.CodeAnalysis.DiagnosticSeverity roslynSeverity)

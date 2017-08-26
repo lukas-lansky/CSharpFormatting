@@ -9,10 +9,10 @@ namespace CSharpFormatting.Parsing.Roslyn
 {
     internal sealed class ReportingCSharpSyntaxWalker : CSharpSyntaxWalker
     {
-        private readonly Action<AnnotatedCodeChunk> AddItcAction;
+        private readonly Action<int, AnnotatedCodeChunk> AddItcAction;
         private readonly SemanticModel SemanticModel;
 
-        public ReportingCSharpSyntaxWalker(Action<AnnotatedCodeChunk> addItcAction, SemanticModel sm)
+        public ReportingCSharpSyntaxWalker(Action<int, AnnotatedCodeChunk> addItcAction, SemanticModel sm)
             : base(SyntaxWalkerDepth.Trivia)
         {
             AddItcAction = addItcAction;
@@ -95,9 +95,9 @@ namespace CSharpFormatting.Parsing.Roslyn
             {
                 itc.CodeType = CodeType.Keyword;
             }
-                        
-            AddItcAction(itc);
-
+            
+            AddItcAction(token.SpanStart, itc);
+            
             base.VisitToken(token);
         }
 
@@ -129,8 +129,8 @@ namespace CSharpFormatting.Parsing.Roslyn
             {
                 atch.CodeType = CodeType.Comment;
             }
-
-            AddItcAction(atch);
+            
+            AddItcAction(trivia.SpanStart, atch);
 
             base.VisitTrivia(trivia);
         }

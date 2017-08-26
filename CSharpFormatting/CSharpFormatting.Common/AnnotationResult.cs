@@ -1,5 +1,6 @@
 ﻿using CSharpFormatting.Common.Chunk;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CSharpFormatting.Common
 {
@@ -14,5 +15,9 @@ namespace CSharpFormatting.Common
             DiagnosticResults = new List<CodeDiagnosticResult>(diagnosticResults);
             TextChunks = new List<AnnotatedCodeChunk>(textChunks);
         }
+
+        public bool Success => DiagnosticResults.All(r => r.Severity != DiagnosticSeverity.Error);
+
+        public bool WarninglessSuccess => DiagnosticResults.All(r => r.Severity != DiagnosticSeverity.Error && r.Severity != DiagnosticSeverity.Warning);
     }
 }
