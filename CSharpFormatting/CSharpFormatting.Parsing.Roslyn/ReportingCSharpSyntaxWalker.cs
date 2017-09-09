@@ -4,15 +4,16 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using CSharpFormatting.Common.Chunk;
+using CSharpFormatting.Common.Chunk.Details;
 
 namespace CSharpFormatting.Parsing.Roslyn
 {
     internal sealed class ReportingCSharpSyntaxWalker : CSharpSyntaxWalker
     {
-        private readonly Action<int, AnnotatedCodeChunk> AddItcAction;
+        private readonly Action<int, IAnnotatedCodeChunk> AddItcAction;
         private readonly SemanticModel SemanticModel;
 
-        public ReportingCSharpSyntaxWalker(Action<int, AnnotatedCodeChunk> addItcAction, SemanticModel sm)
+        public ReportingCSharpSyntaxWalker(Action<int, IAnnotatedCodeChunk> addItcAction, SemanticModel sm)
             : base(SyntaxWalkerDepth.Trivia)
         {
             AddItcAction = addItcAction;
@@ -21,67 +22,78 @@ namespace CSharpFormatting.Parsing.Roslyn
 
         public override void VisitToken(SyntaxToken token)
         {
-            var itc = new AnnotatedCodeChunk {TextValue = token.Text};
+            IAnnotatedCodeChunk itc = new AnnotatedCodeChunk<ICodeDetails> { TextValue = token.Text};
 
             var node = token.Parent;
 
             if (token.IsKind(SyntaxKind.IdentifierToken))
             {
-                if (node is IdentifierNameSyntax) // var, or variable mention
+                switch (node)
                 {
-                    var symbol = SemanticModel.GetSymbolInfo(node).Symbol;
+                    case IdentifierNameSyntax identifierNameSyntaxNode: // var, or variable mention
+                        var symbol = SemanticModel.GetSymbolInfo(identifierNameSyntaxNode).Symbol;
 
-                    if (symbol is INamedTypeSymbol) // var, or variable mention
-                    {
-                        if (node.ToString() == "var")
+                        switch (symbol)
                         {
-                            itc.CodeType = CodeType.Keyword;
+                            case INamedTypeSymbol namedTypeSymbol: // var, or variable mention
+                                if (node.ToString() == "var")
+                                {
+                                    itc.CodeType = CodeType.Keyword;
+                                }
+                                else
+                                {
+                                    itc = new AnnotatedCodeChunk<TypeDetails>
+                                    {
+                                        CodeType = CodeType.Type,
+                                        TextValue = token.Text,
+                                        Details = new TypeDetails
+                                        {
+                                            FullName = namedTypeSymbol.ToDisplayString()
+                                        }
+                                    };
+                                }
+                                itc.TooltipValue = GetTooltipForType(namedTypeSymbol);
+
+                                break;
+
+                            case IFieldSymbol fieldSymbol: // variable mention
+                                itc.CodeType = CodeType.Variable;
+                                itc.TooltipValue = GetTooltipForType((symbol as IFieldSymbol).Type);
+                                break;
+
+                            case IMethodSymbol methodSymbol: // method call
+                                itc.CodeType = CodeType.Method;
+                                itc.TooltipValue = GetTooltipForMethod(symbol as IMethodSymbol);
+                                break;
+
+                            case INamespaceSymbol namespaceSymbol:
+                                itc.CodeType = CodeType.Namespace;
+                                itc.TooltipValue = GetTooltipForNamespace(symbol as INamespaceSymbol);
+                                break;
+
+                            case IPropertySymbol propertySymbol:
+                                itc.CodeType = CodeType.Property;
+                                itc.TooltipValue = GetTooltipForProperty(propertySymbol);
+                                break;
                         }
-                        else
+                        break;
+
+                    case VariableDeclaratorSyntax variableDeclaratorNode: // variable name declaration
+                        var declaredSymbol = SemanticModel.GetDeclaredSymbol(node);
+                        var typeSymbol = declaredSymbol as IFieldSymbol;
+                        itc.CodeType = CodeType.Variable;
+                        itc.TooltipValue = GetTooltipForType(typeSymbol?.Type);
+                        break;
+
+                    case GenericNameSyntax genericNameNode:
+                        var symbolInfo = SemanticModel.GetSymbolInfo(node).Symbol;
+
+                        if (symbolInfo is INamedTypeSymbol)
                         {
                             itc.CodeType = CodeType.Type;
+                            itc.TooltipValue = GetTooltipForType(symbolInfo as INamedTypeSymbol);
                         }
-                        itc.TooltipValue = GetTooltipForType(symbol as INamedTypeSymbol);
-                    }
-                    else if (symbol is IFieldSymbol) // variable mention
-                    {
-                        itc.CodeType = CodeType.Variable;
-                        itc.TooltipValue = GetTooltipForType((symbol as IFieldSymbol).Type);
-                    }
-                    else if (symbol is IMethodSymbol) // method call
-                    {
-                        itc.CodeType = CodeType.Method;
-                        itc.TooltipValue = GetTooltipForMethod(symbol as IMethodSymbol);
-                    }
-                    else if (symbol is INamespaceSymbol)
-                    {
-                        itc.CodeType = CodeType.Namespace;
-                        itc.TooltipValue = GetTooltipForNamespace(symbol as INamespaceSymbol);
-                    }
-                    else if (symbol is IPropertySymbol)
-                    {
-                        itc.CodeType = CodeType.Property;
-                        itc.TooltipValue = GetTooltipForProperty(symbol as IPropertySymbol);
-                    }
-                }
-
-                if (node is VariableDeclaratorSyntax) // variable name declaration
-                {
-                    var symbol = SemanticModel.GetDeclaredSymbol(node);
-                    var typeSymbol = symbol as IFieldSymbol;
-                    itc.CodeType = CodeType.Variable;
-                    itc.TooltipValue = GetTooltipForType(typeSymbol?.Type);
-                }
-
-                if (node is GenericNameSyntax)
-                {
-                    var symbol = SemanticModel.GetSymbolInfo(node).Symbol;
-
-                    if (symbol is INamedTypeSymbol)
-                    {
-                        itc.CodeType = CodeType.Type;
-                        itc.TooltipValue = GetTooltipForType(symbol as INamedTypeSymbol);
-                    }
+                        break;
                 }
             }
             else if (node is PredefinedTypeSyntax) // "int"
@@ -120,7 +132,7 @@ namespace CSharpFormatting.Parsing.Roslyn
 
         public override void VisitTrivia(SyntaxTrivia trivia)
         {
-            var atch = new AnnotatedCodeChunk { TextValue = trivia.ToString() };
+            var atch = new AnnotatedCodeChunk<ICodeDetails> { TextValue = trivia.ToString() };
 
             var triviaKind = trivia.Kind();
             if (triviaKind == SyntaxKind.SingleLineCommentTrivia

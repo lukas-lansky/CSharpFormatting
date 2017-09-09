@@ -2,6 +2,7 @@
 using CSharpFormatting.Export.Html.Helpers;
 using CSharpFormatting.Common.Chunk;
 using Xunit;
+using CSharpFormatting.Common.Chunk.Details;
 
 namespace CSharpFormatting.Export.Html.Test.Helpers
 {
@@ -10,7 +11,7 @@ namespace CSharpFormatting.Export.Html.Test.Helpers
         [Fact]
         public void PlainChunkIsNotAnnotated()
         {
-            var ch = new AnnotatedCodeChunk { TextValue = "just text" };
+            var ch = new AnnotatedCodeChunk<ICodeDetails> { TextValue = "just text" };
 
             var chHtmlized = new CodeChunkHtmlizer().HtmlizeChunkText(1, ch);
 
@@ -20,7 +21,7 @@ namespace CSharpFormatting.Export.Html.Test.Helpers
         [Fact]
         public void CommentCodeTypeIsTranslatedToClassAttribute()
         {
-            var ch = new AnnotatedCodeChunk { TextValue = "// some comment", CodeType = CodeType.Comment };
+            var ch = new AnnotatedCodeChunk<ICodeDetails> { TextValue = "// some comment", CodeType = CodeType.Comment };
 
             var chHtmlized = new CodeChunkHtmlizer().HtmlizeChunkText(1, ch);
 

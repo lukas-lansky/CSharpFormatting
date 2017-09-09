@@ -8,12 +8,12 @@ namespace CSharpFormatting.Common
     {
         public readonly IReadOnlyList<CodeDiagnosticResult> DiagnosticResults;
 
-        public readonly IReadOnlyList<AnnotatedCodeChunk> TextChunks;
+        public readonly IReadOnlyList<IAnnotatedCodeChunk> TextChunks;
 
-        public AnnotationResult(IEnumerable<CodeDiagnosticResult> diagnosticResults, IEnumerable<AnnotatedCodeChunk> textChunks)
+        public AnnotationResult(IEnumerable<CodeDiagnosticResult> diagnosticResults, IEnumerable<IAnnotatedCodeChunk> textChunks)
         {
             DiagnosticResults = new List<CodeDiagnosticResult>(diagnosticResults);
-            TextChunks = new List<AnnotatedCodeChunk>(textChunks);
+            TextChunks = new List<IAnnotatedCodeChunk>(textChunks);
         }
 
         public bool Success => DiagnosticResults.All(r => r.Severity != DiagnosticSeverity.Error);

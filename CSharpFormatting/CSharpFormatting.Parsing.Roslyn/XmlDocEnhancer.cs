@@ -1,4 +1,5 @@
 ﻿using CSharpFormatting.Common.Chunk;
+using CSharpFormatting.Common.Chunk.Details;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace CSharpFormatting.Parsing.Roslyn
             _typeInfos = new Dictionary<string, string>();
         }
 
-        public AnnotatedCodeChunk EnhanceChunk(AnnotatedCodeChunk unenhancedChunk)
+        public IAnnotatedCodeChunk EnhanceChunk(IAnnotatedCodeChunk unenhancedChunk)
         {
             BuildCache();
 
@@ -32,7 +33,7 @@ namespace CSharpFormatting.Parsing.Roslyn
             {
                 if (_typeInfos.ContainsKey(unenhancedChunk.TextValue))
                 {
-                    return new AnnotatedCodeChunk
+                    return new AnnotatedCodeChunk<ICodeDetails>
                     {
                         CodeType = unenhancedChunk.CodeType,
                         LineNumber = unenhancedChunk.LineNumber,
@@ -43,7 +44,7 @@ namespace CSharpFormatting.Parsing.Roslyn
                 }
             }
 
-            return new AnnotatedCodeChunk
+            return new AnnotatedCodeChunk<ICodeDetails>
             {
                 CodeType = unenhancedChunk.CodeType,
                 LineNumber = unenhancedChunk.LineNumber,

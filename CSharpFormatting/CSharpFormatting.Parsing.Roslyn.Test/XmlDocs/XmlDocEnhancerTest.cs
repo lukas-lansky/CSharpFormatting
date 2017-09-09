@@ -1,4 +1,5 @@
 ﻿using CSharpFormatting.Common.Chunk;
+using CSharpFormatting.Common.Chunk.Details;
 using Xunit;
 
 namespace CSharpFormatting.Parsing.Roslyn.Test.XmlDocs
@@ -35,7 +36,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test.XmlDocs
     </members>
 </doc>
 "});
-            var chunkToEnhance = new AnnotatedCodeChunk
+            var chunkToEnhance = new AnnotatedCodeChunk<ICodeDetails>
             {
                 CodeType = Common.CodeType.Type,
                 LineNumber = 1,
@@ -58,7 +59,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test.XmlDocs
     </members>
 </doc>
 " });
-            var chunkToEnhance = new AnnotatedCodeChunk
+            var chunkToEnhance = new AnnotatedCodeChunk<ICodeDetails>
             {
                 CodeType = Common.CodeType.Type,
                 LineNumber = 1,
@@ -99,7 +100,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test.XmlDocs
     </members>
 </doc>
 " });
-            var chunkToEnhance = new AnnotatedCodeChunk
+            var chunkToEnhance = new AnnotatedCodeChunk<ICodeDetails>
             {
                 CodeType = Common.CodeType.Type,
                 LineNumber = 1,

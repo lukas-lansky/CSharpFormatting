@@ -1,11 +1,12 @@
 ﻿using CSharpFormatting.Common;
 using CSharpFormatting.Common.Chunk;
+using CSharpFormatting.Common.Chunk.Details;
 
 namespace CSharpFormatting.Export.Html.Helpers
 {
     public sealed class CodeChunkHtmlizer
     {
-        public string HtmlizeChunkText(int chunkId, AnnotatedCodeChunk chunk)
+        public string HtmlizeChunkText(int chunkId, IAnnotatedCodeChunk chunk)
         {
             var baseValue = chunk.TextValue;
 
@@ -46,7 +47,7 @@ namespace CSharpFormatting.Export.Html.Helpers
         }
 
         // <div class="tip" id="fs1">val a : float<br /><br />Full name: Regression.a</div>
-        public string HtmlizeChunkTooltip(int chunkId, AnnotatedCodeChunk chunk) => 
+        public string HtmlizeChunkTooltip(int chunkId, IAnnotatedCodeChunk chunk) => 
             $"<div class='tip' id='cs{chunkId}'>{chunk.TooltipValue}</div>";
     }
 }

@@ -7,6 +7,7 @@ using System;
 using CSharpFormatting.Export.Html.Helpers;
 using CSharpFormatting.Common.Chunk;
 using System.Text;
+using CSharpFormatting.Common.Chunk.Details;
 
 namespace CSharpFormatting.Export.Html
 {
@@ -41,7 +42,7 @@ namespace CSharpFormatting.Export.Html
 
         public string ExportAnnotationResultBody(IEnumerable<IChunk> chunks)
         {
-            if (chunks.First() is AnnotatedCodeChunk)
+            if (chunks.First() is IAnnotatedCodeChunk)
             {
                 var bodyHeader = "<table class='pre'>";
 
@@ -71,24 +72,25 @@ namespace CSharpFormatting.Export.Html
         
         private string HtmlizeChunk(IChunk chunk, int i)
         {
-            if (chunk is AnnotatedCodeChunk)
+            switch (chunk)
             {
-                return new CodeChunkHtmlizer().HtmlizeChunkText(i, (AnnotatedCodeChunk)chunk);
-            }
-            else if (chunk is MarkdownChunk)
-            {
-                return new HeyRed.MarkdownSharp.Markdown().Transform(((MarkdownChunk)chunk).MarkdownSource);
-            }
+                case IAnnotatedCodeChunk codeChunk:
+                    return new CodeChunkHtmlizer().HtmlizeChunkText(i, codeChunk);
 
-            throw new NotSupportedException();
+                case MarkdownChunk markdownChunk:
+                    return new HeyRed.MarkdownSharp.Markdown().Transform(((MarkdownChunk)chunk).MarkdownSource);
+
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
         private string GetTooltipDivs(IEnumerable<IChunk> chunks) =>
             string.Join(
                 Environment.NewLine,
                 chunks
-                    .Where(ch => ch is AnnotatedCodeChunk)
-                    .Select((ch, i) => new CodeChunkHtmlizer().HtmlizeChunkTooltip(i, (AnnotatedCodeChunk)ch)));
+                    .Where(ch => ch is AnnotatedCodeChunk<ICodeDetails>)
+                    .Select((ch, i) => new CodeChunkHtmlizer().HtmlizeChunkTooltip(i, (AnnotatedCodeChunk<ICodeDetails>)ch)));
 
         private string GetLineNumberSpans(int count) =>
             string.Join(

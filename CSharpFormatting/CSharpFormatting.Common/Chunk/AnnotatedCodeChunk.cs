@@ -1,8 +1,20 @@
-﻿using System;
+﻿using CSharpFormatting.Common.Chunk.Details;
 
 namespace CSharpFormatting.Common.Chunk
 {
-    public struct AnnotatedCodeChunk : IChunk
+    public interface IAnnotatedCodeChunk : IChunk
+    {
+        string TextValue { get; set; }
+
+        CodeType CodeType { get; set; }
+
+        string TooltipValue { get; set; }
+
+        string ExtendedDescription { get; set; }
+    }
+
+    public struct AnnotatedCodeChunk<CodeDetails> : IAnnotatedCodeChunk
+        where CodeDetails : ICodeDetails
     {
         public int LineNumber { get; set; }
 
@@ -13,5 +25,7 @@ namespace CSharpFormatting.Common.Chunk
         public string TooltipValue { get; set; }
 
         public string ExtendedDescription { get; set; }
+
+        public CodeDetails Details { get; set; }
     }
 }

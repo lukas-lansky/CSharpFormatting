@@ -15,7 +15,7 @@ namespace CSharpFormatting.Parsing.Roslyn
         {
             if (string.IsNullOrWhiteSpace(code))
             {
-                return new AnnotationResult(new List<CodeDiagnosticResult>(), new List<AnnotatedCodeChunk>());
+                return new AnnotationResult(new List<CodeDiagnosticResult>(), new List<IAnnotatedCodeChunk>());
             }
 
             var options = ScriptOptions.Default;
@@ -36,7 +36,7 @@ namespace CSharpFormatting.Parsing.Roslyn
 
             var emitResult = roslynCompilation.Emit(new MemoryStream());
 
-            var chunks = new List<AnnotatedCodeChunk>();
+            var chunks = new List<IAnnotatedCodeChunk>();
 
             if (!diagnostics.Any(d => d.Severity == Common.DiagnosticSeverity.Error))
             {
@@ -64,9 +64,9 @@ namespace CSharpFormatting.Parsing.Roslyn
             return new AnnotationResult(diagnostics, chunks);
         }
 
-        private IEnumerable<AnnotatedCodeChunk> ParseSyntaxTree(SyntaxTree syntaxTree, SemanticModel sm)
+        private IEnumerable<IAnnotatedCodeChunk> ParseSyntaxTree(SyntaxTree syntaxTree, SemanticModel sm)
         {
-            var chunks = new List<(int position, AnnotatedCodeChunk chunk)>();
+            var chunks = new List<(int position, IAnnotatedCodeChunk chunk)>();
             new ReportingCSharpSyntaxWalker((pos, itc) => chunks.Add((pos, itc)), sm).Visit(syntaxTree.GetRoot());
             return chunks.OrderBy(ch => ch.position).Select(ch => ch.chunk);
         }

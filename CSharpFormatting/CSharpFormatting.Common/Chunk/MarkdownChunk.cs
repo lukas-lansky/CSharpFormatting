@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CSharpFormatting.Common.Chunk
+﻿namespace CSharpFormatting.Common.Chunk
 {
     public struct MarkdownChunk : IChunk
     {
