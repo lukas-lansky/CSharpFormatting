@@ -11,5 +11,7 @@ namespace CSharpFormatting.Common.Chunk
         public CodeType CodeType { get; set; }
 
         public string TooltipValue { get; set; }
+
+        public string ExtendedDescription { get; set; }
     }
 }

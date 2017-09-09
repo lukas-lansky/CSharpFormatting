@@ -50,6 +50,17 @@ namespace CSharpFormatting.Parsing.Roslyn
                 }
             }
 
+            if (baseDirectory != null)
+            {
+                var xmlDocs = Directory.EnumerateFiles(baseDirectory, "*.xml").Select(File.ReadAllText);
+
+                if (xmlDocs.Any())
+                {
+                    var xmlDocEnhancer = new XmlDocEnhancer(xmlDocs);
+                    chunks = chunks.Select(xmlDocEnhancer.EnhanceChunk).ToList();
+                }
+            }
+
             return new AnnotationResult(diagnostics, chunks);
         }
 
