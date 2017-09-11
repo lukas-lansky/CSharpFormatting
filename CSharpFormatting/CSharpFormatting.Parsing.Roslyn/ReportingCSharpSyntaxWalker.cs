@@ -88,11 +88,19 @@ namespace CSharpFormatting.Parsing.Roslyn
                     case GenericNameSyntax genericNameNode:
                         var symbolInfo = SemanticModel.GetSymbolInfo(node).Symbol;
 
-                        if (symbolInfo is INamedTypeSymbol)
+                        switch (symbolInfo)
                         {
-                            itc.CodeType = CodeType.Type;
-                            itc.TooltipValue = GetTooltipForType(symbolInfo as INamedTypeSymbol);
+                            case INamedTypeSymbol namedTypeSymbolInfo:
+                                itc.CodeType = CodeType.Type;
+                                itc.TooltipValue = GetTooltipForType(namedTypeSymbolInfo);
+                                break;
+
+                            case IMethodSymbol methodSymbol: // method call
+                                itc.CodeType = CodeType.Method;
+                                itc.TooltipValue = GetTooltipForMethod(methodSymbol);
+                                break;
                         }
+                        
                         break;
                 }
             }
