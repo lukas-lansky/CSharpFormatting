@@ -89,9 +89,10 @@ namespace CSharpFormatting.Export.Html
             string.Join(
                 Environment.NewLine,
                 chunks
-                    .Where(ch => ch is AnnotatedCodeChunk<ICodeDetails>)
-                    .Select((ch, i) => new CodeChunkHtmlizer().HtmlizeChunkTooltip(i, (AnnotatedCodeChunk<ICodeDetails>)ch)));
-
+                    .Where(ch => ch is IAnnotatedCodeChunk)
+                    .Cast<IAnnotatedCodeChunk>()
+                    .Select((ch, i) => new CodeChunkHtmlizer().HtmlizeChunkTooltip(i, ch)));
+        
         private string GetLineNumberSpans(int count) =>
             string.Join(
                 Environment.NewLine,

@@ -32,7 +32,7 @@ namespace CSharpFormatting.Library.IntegrationTest
             }
 
             var formatter = new CSharpFormatter();
-            formatter.GetHtmlForMarkdownContent(@"
+            var generatedHtml = formatter.GetHtmlForMarkdownContent(@"
 
 # Let's talk about Castle Windsor
 

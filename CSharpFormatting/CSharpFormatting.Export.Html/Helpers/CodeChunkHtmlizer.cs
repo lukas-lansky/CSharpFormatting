@@ -1,6 +1,5 @@
 ﻿using CSharpFormatting.Common;
 using CSharpFormatting.Common.Chunk;
-using CSharpFormatting.Common.Chunk.Details;
 
 namespace CSharpFormatting.Export.Html.Helpers
 {
@@ -47,7 +46,15 @@ namespace CSharpFormatting.Export.Html.Helpers
         }
 
         // <div class="tip" id="fs1">val a : float<br /><br />Full name: Regression.a</div>
-        public string HtmlizeChunkTooltip(int chunkId, IAnnotatedCodeChunk chunk) => 
-            $"<div class='tip' id='cs{chunkId}'>{chunk.TooltipValue}</div>";
+        public string HtmlizeChunkTooltip(int chunkId, IAnnotatedCodeChunk chunk)
+        {
+            var tooltipValue = chunk.TooltipValue;
+            if (!string.IsNullOrWhiteSpace(chunk.ExtendedDescription))
+            {
+                tooltipValue = $"{tooltipValue}<br>{chunk.ExtendedDescription}";
+            }
+
+            return $"<div class='tip' id='cs{chunkId}'>{tooltipValue}</div>";
+        }   
     }
 }

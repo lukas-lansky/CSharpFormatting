@@ -36,12 +36,13 @@ namespace CSharpFormatting.Parsing.Roslyn.Test.XmlDocs
     </members>
 </doc>
 "});
-            var chunkToEnhance = new AnnotatedCodeChunk<ICodeDetails>
+            var chunkToEnhance = new AnnotatedCodeChunk<TypeDetails>
             {
                 CodeType = Common.CodeType.Type,
                 LineNumber = 1,
-                TextValue = "Castle.MicroKernel.IFacility",
-                TooltipValue = "IFacility"
+                TextValue = "interface Castle.MicroKernel.IFacility",
+                TooltipValue = "IFacility",
+                Details = new TypeDetails { FullName = "Castle.MicroKernel.IFacility" }
             };
             var enhancedChunk = enh.EnhanceChunk(chunkToEnhance);
             Assert.Equal(enhancedChunk.ExtendedDescription, "Unit of extension. A facility should use the extension points offered by the kernel to augment its functionality.");
@@ -59,12 +60,13 @@ namespace CSharpFormatting.Parsing.Roslyn.Test.XmlDocs
     </members>
 </doc>
 " });
-            var chunkToEnhance = new AnnotatedCodeChunk<ICodeDetails>
+            var chunkToEnhance = new AnnotatedCodeChunk<TypeDetails>
             {
                 CodeType = Common.CodeType.Type,
                 LineNumber = 1,
-                TextValue = "Castle.MicroKernel.IFacility",
-                TooltipValue = "IFacility"
+                TextValue = "interface Castle.MicroKernel.IFacility",
+                TooltipValue = "IFacility",
+                Details = new TypeDetails { FullName = "Castle.MicroKernel.IFacility" }
             };
             var enhancedChunk = enh.EnhanceChunk(chunkToEnhance);
             Assert.Equal(enhancedChunk.ExtendedDescription, null);
@@ -100,12 +102,13 @@ namespace CSharpFormatting.Parsing.Roslyn.Test.XmlDocs
     </members>
 </doc>
 " });
-            var chunkToEnhance = new AnnotatedCodeChunk<ICodeDetails>
+            var chunkToEnhance = new AnnotatedCodeChunk<TypeDetails>
             {
                 CodeType = Common.CodeType.Type,
                 LineNumber = 1,
-                TextValue = "Some.Other.IFacility",
-                TooltipValue = "IFacility"
+                TextValue = "interface Some.Other.IFacility",
+                TooltipValue = "IFacility",
+                Details = new TypeDetails { FullName = "Some.Other.IFacility" }
             };
             var enhancedChunk = enh.EnhanceChunk(chunkToEnhance);
             Assert.Equal(enhancedChunk.ExtendedDescription, null);

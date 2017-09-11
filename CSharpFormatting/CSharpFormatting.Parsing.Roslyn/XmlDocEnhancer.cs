@@ -29,21 +29,25 @@ namespace CSharpFormatting.Parsing.Roslyn
         {
             BuildCache();
 
-            if (unenhancedChunk.CodeType == Common.CodeType.Type)
+            switch (unenhancedChunk)
             {
-                if (_typeInfos.ContainsKey(unenhancedChunk.TextValue))
-                {
-                    return new AnnotatedCodeChunk<ICodeDetails>
+                case AnnotatedCodeChunk<TypeDetails> chunkWithTypeDetails:
+                    if (_typeInfos.ContainsKey(chunkWithTypeDetails.Details.FullName))
                     {
-                        CodeType = unenhancedChunk.CodeType,
-                        LineNumber = unenhancedChunk.LineNumber,
-                        ExtendedDescription = _typeInfos[unenhancedChunk.TextValue],
-                        TextValue = unenhancedChunk.TextValue,
-                        TooltipValue = unenhancedChunk.TooltipValue
-                    };
-                }
-            }
+                        return new AnnotatedCodeChunk<ICodeDetails>
+                        {
+                            CodeType = chunkWithTypeDetails.CodeType,
+                            LineNumber = chunkWithTypeDetails.LineNumber,
+                            ExtendedDescription = _typeInfos[chunkWithTypeDetails.Details.FullName],
+                            TextValue = chunkWithTypeDetails.TextValue,
+                            TooltipValue = chunkWithTypeDetails.TooltipValue,
+                            Details = chunkWithTypeDetails.Details
+                        };
+                    }
 
+                    break;
+            }
+            
             return new AnnotatedCodeChunk<ICodeDetails>
             {
                 CodeType = unenhancedChunk.CodeType,
