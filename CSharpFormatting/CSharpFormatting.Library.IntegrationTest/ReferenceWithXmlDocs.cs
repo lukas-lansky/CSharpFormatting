@@ -42,6 +42,7 @@ There is this IFacility inferface:
     var t = typeof(Castle.MicroKernel.IFacility);
 
 ", baseReferencePath: workingPath);
+            Assert.True(generatedHtml.Contains("Unit of extension. A facility should use the extension points offered by the kernel to augment its functionality."));
         }
 
         private byte[] GetNuGet(string name, string version)
