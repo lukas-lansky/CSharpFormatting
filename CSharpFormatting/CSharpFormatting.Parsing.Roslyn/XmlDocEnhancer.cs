@@ -3,6 +3,7 @@ using CSharpFormatting.Common.Chunk.Details;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -87,12 +88,42 @@ namespace CSharpFormatting.Parsing.Roslyn
                     }
                     typeName = typeName.Substring("T:".Length);
 
-                    var typeDescription = CleanTypeDescription(memberNode.Value);
+                    var typeDescription = CleanTypeDescription(GetTextContent(memberNode.XPathSelectElement("summary")));
                     _typeInfos.Add(typeName, typeDescription);
                 }
             }
 
             _cacheBuilt = true;
+        }
+
+        private string GetTextContent(XElement e)
+        {
+            if (e == null)
+            {
+                return "";
+            }
+
+            var textContent = new StringBuilder();
+
+            foreach (var descendant in e.Nodes())
+            {
+                switch (descendant)
+                {
+                    case XElement descendantElement:
+                        if (descendantElement.Name == "see")
+                        {
+                            var typeName = descendantElement.Attribute("cref").Value.Split('.').Last();
+                            textContent.Append(typeName);
+                        }
+                        break;
+
+                    case XText textNode:
+                        textContent.Append(textNode);
+                        break;
+                }
+            }
+
+            return textContent.ToString();
         }
 
         private string CleanTypeDescription(string td)

@@ -41,6 +41,9 @@ There is this IFacility inferface:
     #r ""Castle.Windsor.dll""
     var t = typeof(Castle.MicroKernel.IFacility);
 
+    var container = new Castle.Windsor.WindsorContainer();
+    container.Resolve<string>();
+
 ", baseReferencePath: workingPath);
             Assert.True(generatedHtml.Contains("Unit of extension. A facility should use the extension points offered by the kernel to augment its functionality."));
         }

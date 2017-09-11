@@ -113,5 +113,35 @@ namespace CSharpFormatting.Parsing.Roslyn.Test.XmlDocs
             var enhancedChunk = enh.EnhanceChunk(chunkToEnhance);
             Assert.Equal(enhancedChunk.ExtendedDescription, null);
         }
+
+        [Fact]
+        public void CrefIsResolved()
+        {
+            var enh = new XmlDocEnhancer(new[] { @"<?xml version=""1.0""?>
+<doc>
+    <assembly>
+        <name>Castle.Windsor</name>
+    </assembly>
+    <members>
+        <member name=""T:Castle.Windsor.WindsorContainer"">
+            <summary>
+              Implementation of <see cref=""T:Castle.Windsor.IWindsorContainer""/>
+              which delegates to <see cref=""T:Castle.MicroKernel.IKernel""/> implementation.
+            </summary>
+        </member>
+    </members>
+</doc>
+" });
+            var chunkToEnhance = new AnnotatedCodeChunk<TypeDetails>
+            {
+                CodeType = Common.CodeType.Type,
+                LineNumber = 1,
+                TextValue = "interface Castle.Windsor.WindsorContainer",
+                TooltipValue = "WindsorContainer",
+                Details = new TypeDetails { FullName = "Castle.Windsor.WindsorContainer" }
+            };
+            var enhancedChunk = enh.EnhanceChunk(chunkToEnhance);
+            Assert.Equal(enhancedChunk.ExtendedDescription, "Implementation of IWindsorContainer which delegates to IKernel implementation.");
+        }
     }
 }
