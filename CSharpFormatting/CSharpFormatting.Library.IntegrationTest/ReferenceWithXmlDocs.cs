@@ -46,6 +46,7 @@ There is this IFacility inferface:
 
 ", baseReferencePath: workingPath);
             Assert.True(generatedHtml.Contains("Unit of extension. A facility should use the extension points offered by the kernel to augment its functionality."));
+            Assert.True(generatedHtml.Contains("Returns a component instance by the service"));
         }
 
         private byte[] GetNuGet(string name, string version)

@@ -58,17 +58,22 @@ namespace CSharpFormatting.Parsing.Roslyn
 
                             case IFieldSymbol fieldSymbol: // variable mention
                                 itc.CodeType = CodeType.Variable;
-                                itc.TooltipValue = GetTooltipForType((symbol as IFieldSymbol).Type);
+                                itc.TooltipValue = GetTooltipForType(fieldSymbol.Type);
                                 break;
 
                             case IMethodSymbol methodSymbol: // method call
-                                itc.CodeType = CodeType.Method;
-                                itc.TooltipValue = GetTooltipForMethod(symbol as IMethodSymbol);
+                                itc = new AnnotatedCodeChunk<MethodDetails>
+                                {
+                                    CodeType = CodeType.Method,
+                                    TextValue = token.Text,
+                                    TooltipValue = GetTooltipForMethod(methodSymbol),
+                                    Details = GetMethodDetails(methodSymbol)
+                                };
                                 break;
 
                             case INamespaceSymbol namespaceSymbol:
                                 itc.CodeType = CodeType.Namespace;
-                                itc.TooltipValue = GetTooltipForNamespace(symbol as INamespaceSymbol);
+                                itc.TooltipValue = GetTooltipForNamespace(namespaceSymbol);
                                 break;
 
                             case IPropertySymbol propertySymbol:
@@ -91,13 +96,26 @@ namespace CSharpFormatting.Parsing.Roslyn
                         switch (symbolInfo)
                         {
                             case INamedTypeSymbol namedTypeSymbolInfo:
-                                itc.CodeType = CodeType.Type;
-                                itc.TooltipValue = GetTooltipForType(namedTypeSymbolInfo);
+                                itc = new AnnotatedCodeChunk<TypeDetails>
+                                {
+                                    CodeType = CodeType.Type,
+                                    TextValue = token.Text,
+                                    Details = new TypeDetails
+                                    {
+                                        FullName = namedTypeSymbolInfo.ToDisplayString()
+                                    },
+                                    TooltipValue = GetTooltipForType(namedTypeSymbolInfo)
+                                };
                                 break;
 
                             case IMethodSymbol methodSymbol: // method call
-                                itc.CodeType = CodeType.Method;
-                                itc.TooltipValue = GetTooltipForMethod(methodSymbol);
+                                itc = new AnnotatedCodeChunk<MethodDetails>
+                                {
+                                    CodeType = CodeType.Method,
+                                    TextValue = token.Text,
+                                    TooltipValue = GetTooltipForMethod(methodSymbol),
+                                    Details = GetMethodDetails(methodSymbol)
+                                };
                                 break;
                         }
                         
@@ -153,6 +171,22 @@ namespace CSharpFormatting.Parsing.Roslyn
             AddItcAction(trivia.SpanStart, atch);
 
             base.VisitTrivia(trivia);
+        }
+
+        private MethodDetails GetMethodDetails(IMethodSymbol methodSymbol)
+        {
+            var fullMethodName = methodSymbol.ToString().Replace("()", "");
+
+            if (methodSymbol.IsGenericMethod)
+            {
+                fullMethodName = fullMethodName.Split('<')[0];
+                fullMethodName = $"{fullMethodName}``{methodSymbol.Arity}";
+            }
+            
+            return new MethodDetails
+            {
+                FullName = fullMethodName
+            };
         }
     }
 }

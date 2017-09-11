@@ -143,5 +143,36 @@ namespace CSharpFormatting.Parsing.Roslyn.Test.XmlDocs
             var enhancedChunk = enh.EnhanceChunk(chunkToEnhance);
             Assert.Equal(enhancedChunk.ExtendedDescription, "Implementation of IWindsorContainer which delegates to IKernel implementation.");
         }
+
+        [Fact]
+        public void MethodCallIsProcessed()
+        {
+            var enh = new XmlDocEnhancer(new[] { @"<?xml version=""1.0""?>
+<doc>
+    <assembly>
+        <name>Castle.Windsor</name>
+    </assembly>
+    <members>
+        <member name=""M:Castle.Windsor.WindsorContainer.Resolve``1"">
+            <summary>
+              Returns a component instance by the service
+            </summary>
+            <typeparam name = ""T""></typeparam>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
+" });
+            var chunkToEnhance = new AnnotatedCodeChunk<MethodDetails>
+            {
+                CodeType = Common.CodeType.Type,
+                LineNumber = 1,
+                TextValue = "Resolve",
+                TooltipValue = "void Castle.Windsor.WindsorContainer.Resolve()",
+                Details = new MethodDetails { FullName = "Castle.Windsor.WindsorContainer.Resolve``1" }
+            };
+            var enhancedChunk = enh.EnhanceChunk(chunkToEnhance);
+            Assert.Equal(enhancedChunk.ExtendedDescription, "Returns a component instance by the service");
+        }
     }
 }

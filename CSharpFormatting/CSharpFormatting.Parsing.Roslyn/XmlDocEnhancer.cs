@@ -18,12 +18,14 @@ namespace CSharpFormatting.Parsing.Roslyn
         private readonly IEnumerable<string> _xmlDocs;
 
         private readonly Dictionary<string, string> _typeInfos;
+        private readonly Dictionary<string, string> _methodInfos;
         private bool _cacheBuilt = false;
 
         public XmlDocEnhancer(IEnumerable<string> xmlDocs)
         {
             _xmlDocs = xmlDocs;
             _typeInfos = new Dictionary<string, string>();
+            _methodInfos = new Dictionary<string, string>();
         }
 
         public IAnnotatedCodeChunk EnhanceChunk(IAnnotatedCodeChunk unenhancedChunk)
@@ -43,6 +45,22 @@ namespace CSharpFormatting.Parsing.Roslyn
                             TextValue = chunkWithTypeDetails.TextValue,
                             TooltipValue = chunkWithTypeDetails.TooltipValue,
                             Details = chunkWithTypeDetails.Details
+                        };
+                    }
+
+                    break;
+
+                case AnnotatedCodeChunk<MethodDetails> chunkWithMethodDetails:
+                    if (_methodInfos.ContainsKey(chunkWithMethodDetails.Details.FullName))
+                    {
+                        return new AnnotatedCodeChunk<ICodeDetails>
+                        {
+                            CodeType = chunkWithMethodDetails.CodeType,
+                            LineNumber = chunkWithMethodDetails.LineNumber,
+                            ExtendedDescription = _methodInfos[chunkWithMethodDetails.Details.FullName],
+                            TextValue = chunkWithMethodDetails.TextValue,
+                            TooltipValue = chunkWithMethodDetails.TooltipValue,
+                            Details = chunkWithMethodDetails.Details
                         };
                     }
 
@@ -82,14 +100,19 @@ namespace CSharpFormatting.Parsing.Roslyn
                 foreach (var memberNode in parsedXml.XPathSelectElements("/doc/members/member"))
                 {
                     var typeName = memberNode.Attribute("name").Value;
-                    if (!typeName.StartsWith("T:"))
-                    {
-                        continue;
-                    }
-                    typeName = typeName.Substring("T:".Length);
 
-                    var typeDescription = CleanTypeDescription(GetTextContent(memberNode.XPathSelectElement("summary")));
-                    _typeInfos.Add(typeName, typeDescription);
+                    if (typeName.StartsWith("T:"))
+                    {
+                        typeName = typeName.Substring("T:".Length);
+                        var typeDescription = CleanTypeDescription(GetTextContent(memberNode.XPathSelectElement("summary")));
+                        _typeInfos.Add(typeName, typeDescription);
+                    }
+                    else if (typeName.StartsWith("M:"))
+                    {
+                        typeName = typeName.Substring("M:".Length);
+                        var typeDescription = CleanTypeDescription(GetTextContent(memberNode.XPathSelectElement("summary")));
+                        _methodInfos.Add(typeName, typeDescription);
+                    }
                 }
             }
 
@@ -127,7 +150,8 @@ namespace CSharpFormatting.Parsing.Roslyn
         }
 
         private string CleanTypeDescription(string td)
-            => string.Join(
+        {
+            var r = string.Join(
                 " ",
                 td
                     .Replace("\r\n", "\n")
@@ -135,5 +159,7 @@ namespace CSharpFormatting.Parsing.Roslyn
                     .Split('\n')
                     .Select(l => l.Trim())
                     .Where(l => !string.IsNullOrEmpty(l)));
+            return r;
+        }
     }
 }
