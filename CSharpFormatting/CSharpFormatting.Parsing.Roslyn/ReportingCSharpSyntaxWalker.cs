@@ -24,11 +24,11 @@ namespace CSharpFormatting.Parsing.Roslyn
         {
             IAnnotatedCodeChunk itc = new AnnotatedCodeChunk<ICodeDetails> { TextValue = token.Text};
 
-            var node = token.Parent;
+            var parentNode = token.Parent;
 
             if (token.IsKind(SyntaxKind.IdentifierToken))
             {
-                switch (node)
+                switch (parentNode)
                 {
                     case IdentifierNameSyntax identifierNameSyntaxNode: // var, or variable mention
                         var symbol = SemanticModel.GetSymbolInfo(identifierNameSyntaxNode).Symbol;
@@ -36,7 +36,7 @@ namespace CSharpFormatting.Parsing.Roslyn
                         switch (symbol)
                         {
                             case INamedTypeSymbol namedTypeSymbol: // var, or variable mention
-                                if (node.ToString() == "var")
+                                if (parentNode.ToString() == "var")
                                 {
                                     itc.CodeType = CodeType.Keyword;
                                 }
@@ -84,14 +84,14 @@ namespace CSharpFormatting.Parsing.Roslyn
                         break;
 
                     case VariableDeclaratorSyntax variableDeclaratorNode: // variable name declaration
-                        var declaredSymbol = SemanticModel.GetDeclaredSymbol(node);
+                        var declaredSymbol = SemanticModel.GetDeclaredSymbol(parentNode);
                         var typeSymbol = declaredSymbol as IFieldSymbol;
                         itc.CodeType = CodeType.Variable;
                         itc.TooltipValue = GetTooltipForType(typeSymbol?.Type);
                         break;
 
                     case GenericNameSyntax genericNameNode:
-                        var symbolInfo = SemanticModel.GetSymbolInfo(node).Symbol;
+                        var symbolInfo = SemanticModel.GetSymbolInfo(parentNode).Symbol;
 
                         switch (symbolInfo)
                         {
@@ -122,9 +122,9 @@ namespace CSharpFormatting.Parsing.Roslyn
                         break;
                 }
             }
-            else if (node is PredefinedTypeSyntax) // "int"
+            else if (parentNode is PredefinedTypeSyntax) // "int"
             {
-                var type = SemanticModel.GetTypeInfo(node).Type;
+                var type = SemanticModel.GetTypeInfo(parentNode).Type;
                 itc.CodeType = CodeType.Keyword;
                 itc.TooltipValue = GetTooltipForType(type);
             }

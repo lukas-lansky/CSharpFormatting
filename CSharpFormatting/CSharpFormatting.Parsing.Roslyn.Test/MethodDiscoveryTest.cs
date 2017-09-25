@@ -31,5 +31,22 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             Assert.Equal(Common.CodeType.Method, intChunk.CodeType);
             Assert.Equal("string string.Join<int>(string separator, System.Collections.Generic.IEnumerable<int> values)", intChunk.TooltipValue);
         }
+
+        [Fact]
+        public void GenericMethodCallIsRecognized()
+        {
+            var expression = @"
+
+class Hello { public void Greet<T>() { } }
+
+class Usage { public static void DoGreet() { new Hello().Greet<string>(); } }
+";
+            var result = new CSharpParser().Parse(expression);
+
+            var greetChunk = result.TextChunks.Last(ch => ch.TextValue == "Greet");
+
+            ExpressionHelper.Check(expression, result);
+            Assert.Equal(Common.CodeType.Method, greetChunk.CodeType);
+        }
     }
 }
