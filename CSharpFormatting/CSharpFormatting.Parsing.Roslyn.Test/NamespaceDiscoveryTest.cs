@@ -16,7 +16,7 @@ namespace CSharpFormatting.Parsing.Roslyn.Test
             
             ExpressionHelper.Check(expression, result);
             Assert.Equal(Common.CodeType.Namespace, namespaceChunk.CodeType);
-            Assert.Equal("System.Collections.Generic", namespaceChunk.TooltipValue);
+            Assert.Equal("namespace System.Collections.Generic", namespaceChunk.TooltipValue);
         }
     }
 }

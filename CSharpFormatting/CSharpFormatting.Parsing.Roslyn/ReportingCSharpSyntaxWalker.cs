@@ -142,7 +142,8 @@ namespace CSharpFormatting.Parsing.Roslyn
         private string GetTooltipForType(ITypeSymbol typeSymbol)
             => typeSymbol.ToDisplayString(
                 new SymbolDisplayFormat(
-                    typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces).AddKindOptions(SymbolDisplayKindOptions.IncludeTypeKeyword));
+                    typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces)
+                    .AddKindOptions(SymbolDisplayKindOptions.IncludeTypeKeyword));
         
         private string GetTooltipForMethod(IMethodSymbol methodSymbol)
             => methodSymbol.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat
@@ -151,7 +152,8 @@ namespace CSharpFormatting.Parsing.Roslyn
                 .AddMemberOptions(SymbolDisplayMemberOptions.IncludeType));
 
         private string GetTooltipForNamespace(INamespaceSymbol namespaceSymbol)
-            => namespaceSymbol.ToDisplayString();
+            => namespaceSymbol.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat
+                .AddKindOptions(SymbolDisplayKindOptions.IncludeNamespaceKeyword));
 
         private string GetTooltipForProperty(IPropertySymbol propertySymbol)
             => propertySymbol.ToDisplayString();
