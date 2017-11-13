@@ -27,5 +27,8 @@ namespace CSharpFormatting.Common.Chunk
         public string ExtendedDescription { get; set; }
 
         public CodeDetails Details { get; set; }
+
+        public override string ToString()
+            => TextValue;
     }
 }

@@ -11,9 +11,9 @@ namespace CSharpFormatting.Library
     public class CSharpFormatter
     {
         /// <summary>
-        /// Throws `CompilationErrorException` when a compilation issue arises.
+        /// Returns low-level compilation results before translation to HTML.
         /// </summary>
-        public string GetHtmlForMarkdownContent(
+        public IEnumerable<IChunk> GetChunksForMarkdownContent(
             string mdContent, string baseReferencePath = null,
             bool failOnCompileWarning = false, bool failOnCompileError = true)
         {
@@ -30,7 +30,7 @@ namespace CSharpFormatting.Library
                 {
                     errors.Add(r.Message);
                 }
-                
+
                 if (failOnCompileWarning && r.Severity == Common.DiagnosticSeverity.Warning)
                 {
                     errors.Add(r.Message);
@@ -44,6 +44,18 @@ namespace CSharpFormatting.Library
             var compilationResult = annotationResult.TextChunks.Cast<IChunk>().ToList();
             SourceDocument.FixLineNumbers(compilationResult, lineNumberTranslation);
             var allChunks = SourceDocument.ReturnMdChunksIntoCompilationResults(compilationResult, sourceDocument.MarkDownBlocks.ToList());
+
+            return allChunks;
+        }
+
+        /// <summary>
+        /// Throws `CompilationErrorException` when a compilation issue arises.
+        /// </summary>
+        public string GetHtmlForMarkdownContent(
+            string mdContent, string baseReferencePath = null,
+            bool failOnCompileWarning = false, bool failOnCompileError = true)
+        {
+            var allChunks = GetChunksForMarkdownContent(mdContent, baseReferencePath, failOnCompileWarning, failOnCompileError);
 
             var exportedHtml = new HtmlExporter().ExportAnnotationResult(allChunks);
 

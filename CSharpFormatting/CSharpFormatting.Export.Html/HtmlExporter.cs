@@ -7,7 +7,6 @@ using System;
 using CSharpFormatting.Export.Html.Helpers;
 using CSharpFormatting.Common.Chunk;
 using System.Text;
-using CSharpFormatting.Common.Chunk.Details;
 
 namespace CSharpFormatting.Export.Html
 {
